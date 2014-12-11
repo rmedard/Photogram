@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>Photogram</display-name>
+	<welcome-file-list>
+		<welcome-file>pages/public/index.jsp</welcome-file>
+	</welcome-file-list>
+	<context-param>
+		<description>Location to store users files</description>
+		<param-name>image-upload</param-name>
+		<param-value>C:\apache-tomcat-8.0.15\webapps\userdirs</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>privateUC</servlet-name>
+		<servlet-class>be.kayiranga.controller.PrivateUserController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>privateUC</servlet-name>
+		<url-pattern>/displayUsers</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>privateUC</servlet-name>
+		<url-pattern>/follow</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>privateUC</servlet-name>
+		<url-pattern>/unfollow</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>publicUC</servlet-name>
+		<servlet-class>be.kayiranga.controller.PublicUserController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/editAddUser</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/uploadImage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/img_display</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>imageDisplay</servlet-name>
+		<servlet-class>be.kayiranga.controller.ImageDisplayer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>imageDisplay</servlet-name>
+		<url-pattern>/displayImg</url-pattern>
+	</servlet-mapping>
+</web-app>
