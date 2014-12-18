@@ -34,3 +34,26 @@ html, body {
 		padding-right: 20px;
 	}
 }
+
+.user-img {
+	position: absolute;
+	left: -37px;
+	width: 225px;
+	height: 150px;
+}
+
+.img-container {
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	position: relative;
+}
+
+.photo-thumbnail {
+	width: 165px;
+	height: 165px;
+	overflow: hidden;
+}
+.photo-thumbnail img{
+	width: 100%;
+}
