@@ -2,6 +2,7 @@ package be.kayiranga.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -38,26 +39,13 @@ public class PublicUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
-		String url = "";
-		if (userPath.equals("/editAddUser")) {
-			HttpSession session = request.getSession(true);
-			if (session != null && (session.getAttribute("user")) != null) {
-				User u = (User) session.getAttribute("user");
-				if (u != null) {
-					request.setAttribute("newUser", false);
-					request.setAttribute("name", u.getName());
-					request.setAttribute("postname", u.getPostname());
-					request.setAttribute("email", u.getEmail());
-					request.setAttribute("username", u.getUsername());
-					request.setAttribute("password", u.getPassword());
-					request.setAttribute("newUser", false);
-				} else {
-					request.setAttribute("newUser", true);
-					userPath = "/login";
-				}
-			} else {
-				request.setAttribute("newUser", true);
-				userPath = "/editAddUser";
+		String url = "/";
+		if (userPath.equals("/images")) {
+			if (request.getParameter("userId") != null) {
+				int userId = Integer.parseInt(request.getParameter("userId"));
+				List<Image> userImages = imageDao.getImagesByUser(userDao
+						.findUserById(userId));
+				request.setAttribute("imgs", userImages);
 			}
 		} else if (userPath.equals("/login")
 				&& request.getParameter("action").equalsIgnoreCase("logout")) {
@@ -68,8 +56,14 @@ public class PublicUserController extends HttpServlet {
 				session = request.getSession(true);
 			}
 			url = "/pages/public" + userPath + ".jsp";
-		} 
-		// String url = "/pages/public" + userPath + ".jsp";
+		}else if(userPath.equalsIgnoreCase("/imagedatadisplay")){
+			if(request.getParameter("imageId") != null){
+				int imageId = Integer.parseInt(request.getParameter("imageId"));
+				Image img = imageDao.getImageById(imageId);
+				request.setAttribute("active-image", img);
+				url = "/pages/private/imageDataDisplay.jsp";
+			}
+		}
 
 		try {
 			request.getRequestDispatcher(url).forward(request, response);
@@ -92,15 +86,14 @@ public class PublicUserController extends HttpServlet {
 				if (loggedInUser != null) {
 					HttpSession session = request.getSession(true);
 					session.setAttribute("user", loggedInUser);
-					session.setAttribute("loggedIn", true);
-					// session.setAttribute("images",
-					// imageDao.getImagesByUser(loggedInUser));
 
+					List<Image> userImages = new ArrayList<Image>();
+					userImages = imageDao.getImagesByUser(loggedInUser);
+
+					session.setAttribute("images", userImages);
 					request.setAttribute("user", loggedInUser);
 					request.setAttribute("username", loggedInUser.getUsername());
-					request.setAttribute("loggedIn", true);
-					request.setAttribute("images",
-							imageDao.getImagesByUser(loggedInUser));
+					request.setAttribute("images", userImages);
 					userPath = "/displayUserProfile";
 					url = "/pages/private" + userPath + ".jsp";
 				} else {
@@ -204,17 +197,19 @@ public class PublicUserController extends HttpServlet {
 											loggedInUser.getUserId(), false,
 											true);
 									imageDao.createImage(image);
-									request.setAttribute("message",
+									session.setAttribute("images", imageDao
+											.getImagesByUser(loggedInUser));
+									request.setAttribute("info_message",
 											"Photo téléchargée avec succès!");
-
+									url = "/pages/private/displayUserProfile.jsp";
 								} else {
-									System.out.println("Dir is null....");
+
 								}
 							}
 						}
 					}
 				} catch (Exception e) {
-					request.setAttribute("message",
+					request.setAttribute("err_message",
 							"Echèc de téléchargement...");
 					e.printStackTrace();
 				}

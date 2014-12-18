@@ -14,15 +14,12 @@ import be.kayiranga.model.User;
 
 public class UserDaoImpl implements UserDao {
 
-	private Connection connection = null;
-
 	@Override
 	public void createUser(User user) {
 		String query = "INSERT INTO users(name, postname, email, username, password, userDir)"
 				+ " VALUES(?, ?, ?, ?, ?, ?)";
 		PreparedStatement ps = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setString(1, user.getName());
@@ -37,7 +34,6 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		} finally {
 			close(ps);
-			close(connection);
 		}
 	}
 
@@ -46,8 +42,7 @@ public class UserDaoImpl implements UserDao {
 		String query = "UPDATE users SET name = ?, postname = ?, "
 				+ "email = ?, username = ?, password = ?, userDir = ? WHERE userId = ?";
 		PreparedStatement ps = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setString(1, user.getName());
@@ -63,7 +58,6 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		} finally {
 			close(ps);
-			close(connection);
 		}
 	}
 
@@ -71,8 +65,7 @@ public class UserDaoImpl implements UserDao {
 	public void deleteUser(User user) {
 		String query = "DELETE FROM users WHERE userId = ?";
 		PreparedStatement ps = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, user.getUserId());
@@ -82,7 +75,6 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		} finally {
 			close(ps);
-			close(connection);
 		}
 	}
 
@@ -92,8 +84,7 @@ public class UserDaoImpl implements UserDao {
 		User user = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, userId);
 			rs = ps.executeQuery();
@@ -111,18 +102,16 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return user;
 	}
 
-	public User findUserByUsername(String username){
+	public User findUserByUsername(String username) {
 		String query = "SELECT * FROM users WHERE username = ?";
 		User user = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setString(1, username);
 			rs = ps.executeQuery();
@@ -140,19 +129,17 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return user;
 	}
-	
+
 	@Override
 	public List<User> findAllUsers() {
 		String query = "SELECT * FROM users";
 		List<User> users = new ArrayList<User>();
 		Statement st = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			st = connection.createStatement();
 			rs = st.executeQuery(query);
 			users = parseUsers(rs);
@@ -161,7 +148,6 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			close(rs);
 			close(st);
-			close(connection);
 		}
 		return users;
 	}
@@ -172,8 +158,7 @@ public class UserDaoImpl implements UserDao {
 		List<User> users = new ArrayList<User>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setString(1, token);
 			ps.setString(2, token);
@@ -185,7 +170,6 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return users;
 	}
@@ -197,8 +181,7 @@ public class UserDaoImpl implements UserDao {
 				+ "f ON u.userId = f.followerId WHERE f.followedId=?";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, user.getUserId());
 			rs = ps.executeQuery(query);
@@ -208,7 +191,6 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return followers;
 	}
@@ -217,8 +199,7 @@ public class UserDaoImpl implements UserDao {
 	public void follow(User follower, User followed) {
 		String query = "INSERT INTO followships(followerId, followedId) VALUES(?, ?)";
 		PreparedStatement ps = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, follower.getUserId());
@@ -230,7 +211,6 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		} finally {
 			close(ps);
-			close(connection);
 		}
 	}
 
@@ -238,8 +218,7 @@ public class UserDaoImpl implements UserDao {
 	public void unfollow(User follower, User followed) {
 		String query = "DELETE FROM followships WHERE followerId = ? AND followedId = ?";
 		PreparedStatement ps = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, follower.getUserId());
@@ -250,7 +229,6 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		} finally {
 			close(ps);
-			close(connection);
 		}
 	}
 
@@ -258,48 +236,46 @@ public class UserDaoImpl implements UserDao {
 	public void setProfileImage(User user, Image image) {
 		String query = "UPDATE images SET isProfilePic = ? WHERE ownerId = ?";
 		PreparedStatement ps = null;
-		for (Image img : new ImageDaoImpl().getImagesByUser(user)) {
-			try {
-				connection = ConnectionManager.getConnection();
-				ps = connection.prepareStatement(query);
-				connection.setAutoCommit(false);
-				if (image.equals(img)) {
-					if (!image.isProfilePic()) {
-						ps.setBoolean(1, true);
-						ps.setInt(2, user.getUserId());
-						ps.executeUpdate();
+		try (Connection connection = ConnectionManager.getConnection()) {
+			ps = connection.prepareStatement(query);
+			connection.setAutoCommit(false);
+			if (image.getOwnerId() == user.getUserId()) {
+				for (Image img : new ImageDaoImpl().getImagesByUser(user)) {
+					if (image.equals(img)) {
+						if (!image.isProfilePic()) {
+							ps.setBoolean(1, true);
+							ps.setInt(2, user.getUserId());
+							ps.executeUpdate();
+						}
+					} else {
+						if (image.isProfilePic()) {
+							ps.setBoolean(1, false);
+							ps.setInt(2, user.getUserId());
+							ps.executeUpdate();
+						}
 					}
-				} else {
-					if (image.isProfilePic()) {
-						ps.setBoolean(1, false);
-						ps.setInt(2, user.getUserId());
-						ps.executeUpdate();
-					}
+					connection.setAutoCommit(true);
 				}
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				close(ps);
-				close(connection);
 			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			close(ps);
 		}
-
 	}
 
 	@Override
 	public Image getProfileImage(User user) {
 		return new ImageDaoImpl().getUserProfileImage(user);
 	}
-	
+
 	@Override
 	public User login(User user) {
 		String query = "SELECT userId FROM users WHERE username = ? AND password = ?";
 		User u = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPassword());
@@ -312,7 +288,6 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return u;
 	}
@@ -361,16 +336,6 @@ public class UserDaoImpl implements UserDao {
 		if (!st.equals(null)) {
 			try {
 				st.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void close(Connection con) {
-		if (con != null) {
-			try {
-				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

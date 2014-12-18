@@ -10,11 +10,11 @@
 <meta name="generator" content="Bootply" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link href="/Photogram/resources/css/bootstrap.min.css" rel="stylesheet">
+<link href="/Photogram/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
 		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-<link href="/Photogram/resources/css/styles.css" rel="stylesheet">
+<link href="resources/css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<header class="navbar navbar-default navbar-static-top"
@@ -55,7 +55,8 @@
 					<c:otherwise>
 						<ul class="pull-right nav navbar-nav">
 							<li><a
-								href="<c:url value="/pages/private/displayUserProfile.jsp"/>">Bienvenu ${user.username}</a></li>
+								href="<c:url value="/pages/private/displayUserProfile.jsp"/>">Bienvenu
+									${user.username}</a></li>
 							<li><a href="<c:url value="/login?action=logout"/>">Logout</a></li>
 						</ul>
 					</c:otherwise>

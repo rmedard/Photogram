@@ -10,8 +10,8 @@ public class Image implements Serializable {
 	private String imagePath;
 	private String imageType;
 	private int ownerId;
-	private boolean isProfilePic;
-	private boolean isPublic;
+	private boolean profilePic;
+	private boolean publicPic;
 	private String description;
 	private Timestamp createdOn;
 
@@ -25,8 +25,8 @@ public class Image implements Serializable {
 		this.imagePath = imagePath;
 		this.imageType = imageType;
 		this.ownerId = ownerId;
-		this.isProfilePic = isProfilePic;
-		this.isPublic = isPublic;
+		this.profilePic = isProfilePic;
+		this.publicPic = isPublic;
 	}
 
 	public Image(int imageId, String imageFile, String imageType, int ownerId,
@@ -37,8 +37,8 @@ public class Image implements Serializable {
 		this.imagePath = imageFile;
 		this.imageType = imageType;
 		this.ownerId = ownerId;
-		this.isProfilePic = isProfilePic;
-		this.isPublic = isPublic;
+		this.profilePic = isProfilePic;
+		this.publicPic = isPublic;
 		this.description = description;
 		this.createdOn = createdOn;
 	}
@@ -68,19 +68,19 @@ public class Image implements Serializable {
 	}
 
 	public boolean isProfilePic() {
-		return isProfilePic;
+		return profilePic;
 	}
 
 	public void setProfilePic(boolean isProfilePic) {
-		this.isProfilePic = isProfilePic;
+		this.profilePic = isProfilePic;
 	}
 
-	public boolean isPublic() {
-		return isPublic;
+	public boolean isPublicPic() {
+		return publicPic;
 	}
 
-	public void setPublic(boolean isPublic) {
-		this.isPublic = isPublic;
+	public void setPublicPic(boolean isPublic) {
+		this.publicPic = isPublic;
 	}
 
 	public int getImageId() {
@@ -111,8 +111,11 @@ public class Image implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + imageId;
-		result = prime * result + ownerId;
+		result = prime * result + (profilePic ? 1231 : 1237);
+		result = prime * result + (publicPic ? 1231 : 1237);
 		return result;
 	}
 
@@ -125,9 +128,16 @@ public class Image implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Image other = (Image) obj;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 		if (imageId != other.imageId)
 			return false;
-		if (ownerId != other.ownerId)
+		if (profilePic != other.profilePic)
+			return false;
+		if (publicPic != other.publicPic)
 			return false;
 		return true;
 	}

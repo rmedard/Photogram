@@ -12,6 +12,11 @@
 		<param-name>image-upload</param-name>
 		<param-value>C:\apache-tomcat-8.0.15\webapps\userdirs</param-value>
 	</context-param>
+	<context-param>
+		<description>Location to store common resources</description>
+		<param-name>resources</param-name>
+		<param-value>C:\apache-tomcat-8.0.15\webapps\resources</param-value>
+	</context-param>
 	<servlet>
 		<servlet-name>privateUC</servlet-name>
 		<servlet-class>be.kayiranga.controller.PrivateUserController</servlet-class>
@@ -52,12 +57,28 @@
 		<servlet-name>publicUC</servlet-name>
 		<url-pattern>/img_display</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/images</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/imagedatadisplay</url-pattern>
+	</servlet-mapping>
 	<servlet>
-		<servlet-name>imageDisplay</servlet-name>
-		<servlet-class>be.kayiranga.controller.ImageDisplayer</servlet-class>
+		<servlet-name>imageController</servlet-name>
+		<servlet-class>be.kayiranga.controller.ImageController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>imageDisplay</servlet-name>
+		<servlet-name>imageController</servlet-name>
 		<url-pattern>/displayImg</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>imageController</servlet-name>
+		<url-pattern>/editImage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>imageController</servlet-name>
+		<url-pattern>/displayProfilePic</url-pattern>
 	</servlet-mapping>
 </web-app>

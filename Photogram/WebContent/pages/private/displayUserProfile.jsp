@@ -1,3 +1,6 @@
+<%@page import="be.kayiranga.model.User"%>
+<%@page import="be.kayiranga.model.Image"%>
+<%@page import="java.util.List"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <jsp:include page="/pages/public/templates/header.jsp" />
@@ -7,7 +10,10 @@
 		<div class="col-md-9">
 			<div class="col-md-3">
 				<div class="row">
-					<h4>Profile Image here</h4>
+					<div class="photo-thumbnail">
+						<img
+							src="${pageContext.request.contextPath}/displayProfilePic?userId=${user.userId}">
+					</div>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -21,11 +27,14 @@
 	</div>
 	<div class="row">
 		<h1>Mes Photos</h1>
-		<c:forEach items="${images}" var="img">
+		<c:forEach var="img" items='${sessionScope["images"]}'>
 			<div class="col-md-3">
-				<img src="displayImg?imageId=${img.imageId}" class="img-thumbnail">
-				<%-- <img src="<c:url value="/displayImg?imageId=${img.imageId}"/>"
-					class="img-thumbnail"> --%>
+				<a
+					href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}">
+					<img
+					src="${pageContext.request.contextPath}/displayImg?imageId=${img.imageId}"
+					class="img-thumbnail">
+				</a>
 			</div>
 		</c:forEach>
 	</div>

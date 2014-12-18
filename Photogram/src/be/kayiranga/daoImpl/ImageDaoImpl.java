@@ -4,22 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import be.kayiranga.dao.ImageDao;
+import be.kayiranga.dao.UserDao;
 import be.kayiranga.model.Image;
 import be.kayiranga.model.User;
 
 public class ImageDaoImpl implements ImageDao {
 
-	private Connection connection = null;
+//	private Connection connection = null;
 
 	@Override
 	public void createImage(Image image) {
-		try {
-			connection = ConnectionManager.getConnection();
+		try(Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			String query = "INSERT INTO images(imagePath, imageType, ownerId, isProfilePic, isPublic,"
 					+ " description) VALUES (?, ?, ?, ?, ?, ?)";
@@ -37,7 +36,7 @@ public class ImageDaoImpl implements ImageDao {
 				ps.setString(2, imageType);
 				ps.setInt(3, image.getOwnerId());
 				ps.setBoolean(4, image.isProfilePic());
-				ps.setBoolean(5, image.isPublic());
+				ps.setBoolean(5, image.isPublicPic());
 				ps.setString(6, image.getDescription());
 				ps.executeUpdate();
 				connection.commit();
@@ -57,12 +56,17 @@ public class ImageDaoImpl implements ImageDao {
 		String query = "UPDATE images SET isProfilePic = ?, "
 				+ "isPublic = ?, description = ? WHERE imageId = ?";
 		PreparedStatement ps = null;
-		connection = ConnectionManager.getConnection();
-		try {
+		try (Connection connection = ConnectionManager.getConnection()){
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
-			ps.setBoolean(1, image.isProfilePic());
-			ps.setBoolean(2, image.isPublic());
+			if (image.isProfilePic()) {
+				UserDao userDao = new UserDaoImpl();
+				userDao.setProfileImage(
+						userDao.findUserById(image.getOwnerId()), image);
+			} else {
+				ps.setBoolean(1, image.isProfilePic());
+			}
+			ps.setBoolean(2, image.isPublicPic());
 			ps.setString(3, image.getDescription());
 			ps.setInt(4, image.getImageId());
 			ps.executeUpdate();
@@ -71,7 +75,6 @@ public class ImageDaoImpl implements ImageDao {
 			e.printStackTrace();
 		} finally {
 			close(ps);
-			close(connection);
 		}
 	}
 
@@ -80,7 +83,7 @@ public class ImageDaoImpl implements ImageDao {
 		Image img = getImageById(image.getImageId());
 		if (!img.equals(null)) {
 			PreparedStatement ps = null;
-			try {
+			try (Connection connection = ConnectionManager.getConnection()){
 				connection.setAutoCommit(false);
 				String query = "DELETE from images WHERE imageId = ?";
 				ps = connection.prepareStatement(query);
@@ -92,30 +95,28 @@ public class ImageDaoImpl implements ImageDao {
 				e1.printStackTrace();
 			} finally {
 				close(ps);
-				close(connection);
 			}
 		}
 	}
 
 	@Override
 	public Image getImageById(int imageId) {
-		String query = "SELECT * FROM images WHERE imageId=?";
+		String query = "SELECT * FROM images WHERE imageId=? LIMIT 1";
 		Image img = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
-			ps = connection.prepareStatement(query);
+		try (Connection con = ConnectionManager.getConnection()) {
+			ps = con.prepareStatement(query);
 			ps.setInt(1, imageId);
 			rs = ps.executeQuery();
-			if (rs.next()) {
+			if (rs.first()) {
 				img = new Image();
 				img.setImageId(rs.getInt("imageId"));
 				img.setImagePath(rs.getString("imagePath"));
 				img.setImageType(rs.getString("imageType"));
 				img.setOwnerId(rs.getInt("ownerId"));
 				img.setProfilePic(rs.getBoolean("isProfilePic"));
-				img.setPublic(rs.getBoolean("isPublic"));
+				img.setPublicPic(rs.getBoolean("isPublic"));
 				img.setDescription(rs.getString("description"));
 				img.setCreatedOn(rs.getTimestamp("createdOn"));
 			}
@@ -124,7 +125,6 @@ public class ImageDaoImpl implements ImageDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return img;
 	}
@@ -135,8 +135,7 @@ public class ImageDaoImpl implements ImageDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Image img = null;
-		connection = ConnectionManager.getConnection();
-		try {
+		try (Connection connection = ConnectionManager.getConnection()){
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, user.getUserId());
 			rs = ps.executeQuery();
@@ -147,7 +146,7 @@ public class ImageDaoImpl implements ImageDao {
 				img.setImageType(rs.getString("imageType"));
 				img.setOwnerId(rs.getInt("ownerId"));
 				img.setProfilePic(rs.getBoolean("isProfilePic"));
-				img.setPublic(rs.getBoolean("isPublic"));
+				img.setPublicPic(rs.getBoolean("isPublic"));
 				img.setDescription(rs.getString("description"));
 				img.setCreatedOn(rs.getTimestamp("createdOn"));
 			}
@@ -156,7 +155,6 @@ public class ImageDaoImpl implements ImageDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return img;
 	}
@@ -167,8 +165,7 @@ public class ImageDaoImpl implements ImageDao {
 		String query = "SELECT * FROM images WHERE ownerId=?";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			connection = ConnectionManager.getConnection();
+		try (Connection connection = ConnectionManager.getConnection()){
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, user.getUserId());
 			rs = ps.executeQuery();
@@ -177,7 +174,6 @@ public class ImageDaoImpl implements ImageDao {
 		} finally {
 			close(rs);
 			close(ps);
-			close(connection);
 		}
 		return imagesByUser;
 	}
@@ -192,7 +188,7 @@ public class ImageDaoImpl implements ImageDao {
 				img.setImageType(rs.getString("imageType"));
 				img.setOwnerId(rs.getInt("ownerId"));
 				img.setProfilePic(rs.getBoolean("isProfilePic"));
-				img.setPublic(rs.getBoolean("isPublic"));
+				img.setPublicPic(rs.getBoolean("isPublic"));
 				img.setDescription(rs.getString("description"));
 				img.setCreatedOn(rs.getTimestamp("createdOn"));
 				images.add(img);
@@ -221,25 +217,4 @@ public class ImageDaoImpl implements ImageDao {
 			}
 		}
 	}
-
-//	private void close(Statement st) {
-//		if (st != null) {
-//			try {
-//				st.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-
-	private void close(Connection con) {
-		if (con != null) {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 }

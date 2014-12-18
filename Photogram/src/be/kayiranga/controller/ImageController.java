@@ -26,9 +26,6 @@ public class ImageController extends HttpServlet {
 
 	public ImageController() {
 		super();
-	}
-
-	public void init(ServletConfig config) throws ServletException {
 		imageDao = new ImageDaoImpl();
 		userDao = new UserDaoImpl();
 	}
@@ -47,8 +44,9 @@ public class ImageController extends HttpServlet {
 			} else if (imageIdParam != null && imageIdParam.equals("-1")) {
 				image = new Image();
 				image.setImageType("png");
-				image.setImagePath(request.getContextPath()
-						+ "/resources/images/anonymous.png");
+				image.setImagePath(getServletContext().getInitParameter(
+						"resources")
+						+ "\\images\\anonymous.png");
 			}
 			response.setContentType("image/" + image.getImageType());
 			Path path = Paths.get(image.getImagePath());
