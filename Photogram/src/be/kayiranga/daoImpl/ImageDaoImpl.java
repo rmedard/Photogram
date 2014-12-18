@@ -14,11 +14,11 @@ import be.kayiranga.model.User;
 
 public class ImageDaoImpl implements ImageDao {
 
-//	private Connection connection = null;
+	// private Connection connection = null;
 
 	@Override
 	public void createImage(Image image) {
-		try(Connection connection = ConnectionManager.getConnection()) {
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			String query = "INSERT INTO images(imagePath, imageType, ownerId, isProfilePic, isPublic,"
 					+ " description) VALUES (?, ?, ?, ?, ?, ?)";
@@ -56,16 +56,15 @@ public class ImageDaoImpl implements ImageDao {
 		String query = "UPDATE images SET isProfilePic = ?, "
 				+ "isPublic = ?, description = ? WHERE imageId = ?";
 		PreparedStatement ps = null;
-		try (Connection connection = ConnectionManager.getConnection()){
+		try (Connection connection = ConnectionManager.getConnection()) {
 			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			if (image.isProfilePic()) {
 				UserDao userDao = new UserDaoImpl();
 				userDao.setProfileImage(
 						userDao.findUserById(image.getOwnerId()), image);
-			} else {
-				ps.setBoolean(1, image.isProfilePic());
 			}
+			ps.setBoolean(1, image.isProfilePic());
 			ps.setBoolean(2, image.isPublicPic());
 			ps.setString(3, image.getDescription());
 			ps.setInt(4, image.getImageId());
@@ -83,7 +82,7 @@ public class ImageDaoImpl implements ImageDao {
 		Image img = getImageById(image.getImageId());
 		if (!img.equals(null)) {
 			PreparedStatement ps = null;
-			try (Connection connection = ConnectionManager.getConnection()){
+			try (Connection connection = ConnectionManager.getConnection()) {
 				connection.setAutoCommit(false);
 				String query = "DELETE from images WHERE imageId = ?";
 				ps = connection.prepareStatement(query);
@@ -135,7 +134,7 @@ public class ImageDaoImpl implements ImageDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Image img = null;
-		try (Connection connection = ConnectionManager.getConnection()){
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, user.getUserId());
 			rs = ps.executeQuery();
@@ -165,7 +164,7 @@ public class ImageDaoImpl implements ImageDao {
 		String query = "SELECT * FROM images WHERE ownerId=?";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try (Connection connection = ConnectionManager.getConnection()){
+		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, user.getUserId());
 			rs = ps.executeQuery();

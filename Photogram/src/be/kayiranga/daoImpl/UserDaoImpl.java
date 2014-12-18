@@ -239,7 +239,7 @@ public class UserDaoImpl implements UserDao {
 		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			connection.setAutoCommit(false);
-			if (image.getOwnerId() == user.getUserId()) {
+			if (user != null && image!= null && image.getOwnerId() == user.getUserId()) {
 				for (Image img : new ImageDaoImpl().getImagesByUser(user)) {
 					if (image.equals(img)) {
 						if (!image.isProfilePic()) {

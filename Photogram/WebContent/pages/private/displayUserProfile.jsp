@@ -10,9 +10,12 @@
 		<div class="col-md-9">
 			<div class="col-md-3">
 				<div class="row">
-					<div class="photo-thumbnail">
-						<img
-							src="${pageContext.request.contextPath}/displayProfilePic?userId=${user.userId}">
+					<div class="photo-thumbnail img-thumbnail">
+						<a
+							href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}">
+							<img
+							src="${pageContext.request.contextPath}/displayProfilePic?userId=${user.userId}" />
+						</a>
 					</div>
 				</div>
 			</div>
@@ -29,12 +32,15 @@
 		<h1>Mes Photos</h1>
 		<c:forEach var="img" items='${sessionScope["images"]}'>
 			<div class="col-md-3">
-				<a
-					href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}">
-					<img
-					src="${pageContext.request.contextPath}/displayImg?imageId=${img.imageId}"
-					class="img-thumbnail">
-				</a>
+				<div class="photo-thumbnail">
+					<a
+						href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}">
+
+						<img
+						src="${pageContext.request.contextPath}/displayImg?imageId=${img.imageId}"
+						class="img-thumbnail" />
+					</a>
+				</div>
 			</div>
 		</c:forEach>
 	</div>

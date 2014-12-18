@@ -40,6 +40,6 @@ html, body {
 	height: 165px;
 	overflow: hidden;
 }
-.photo-thumbnail img{
+.photo-thumbnail a img{
 	width: 100%;
 }

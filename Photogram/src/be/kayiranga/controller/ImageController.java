@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -83,6 +82,9 @@ public class ImageController extends HttpServlet {
 				Image image = new Image();
 				image.setImageId(imageId);
 				image.setDescription(request.getParameter("descriptionTxt"));
+				image.setOwnerId(userDao.findUserById(
+						imageDao.getImageById(imageId).getOwnerId())
+						.getUserId());
 				image.setPublicPic(booleanParser(request
 						.getParameter("publicRd")));
 				image.setProfilePic(booleanParser(request
