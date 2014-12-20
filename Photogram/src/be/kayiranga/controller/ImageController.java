@@ -55,14 +55,20 @@ public class ImageController extends HttpServlet {
 		} else {
 			String url = "";
 			if (userPath.equalsIgnoreCase("/displayProfilePic")) {
-				int userId = Integer.parseInt(request.getParameter("userId"));
-				Image profilePic = imageDao.getUserProfileImage(userDao
-						.findUserById(userId));
-				if (profilePic != null) {
-					url = "/displayImg?imageId=" + profilePic.getImageId();
-				} else {
-					url = "/displayImg?imageId=-1";
+				String userId = request.getParameter("userId");
+				if(userId == null || userId.equals("")){
+					
+				}else{
+					int uId = Integer.parseInt(request.getParameter("userId"));
+					Image profilePic = imageDao.getUserProfileImage(userDao
+							.findUserById(uId));
+					if (profilePic != null) {
+						url = "/displayImg?imageId=" + profilePic.getImageId();
+					} else {
+						url = "/displayImg?imageId=-1";
+					}
 				}
+				
 			}
 			try {
 				request.getRequestDispatcher(url).forward(request, response);

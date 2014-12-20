@@ -39,11 +39,12 @@ public class PublicUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
-		String url = "/";
+		String url = "";
 		if (userPath.equals("")) {
 			System.out.println("ndahari....");
-			request.getServletContext().setAttribute("allusers",
-					userDao.findAllUsers());
+			request.getServletContext()
+					.setAttribute("allusers", userDao.findAllUsers());
+//			url = request.getServletPath();
 		} else if (userPath.equals("/images")) {
 			if (request.getParameter("userId") != null) {
 				int userId = Integer.parseInt(request.getParameter("userId"));
