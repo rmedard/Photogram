@@ -56,10 +56,17 @@ public class PublicUserController extends HttpServlet {
 				session = request.getSession(true);
 			}
 			url = "/pages/public" + userPath + ".jsp";
-		}else if(userPath.equalsIgnoreCase("/imagedatadisplay")){
-			if(request.getParameter("imageId") != null){
-				int imageId = Integer.parseInt(request.getParameter("imageId"));
-				Image img = imageDao.getImageById(imageId);
+		} else if (userPath.equalsIgnoreCase("/imagedatadisplay")) {
+			if (request.getParameter("imageId") != null) {
+				Image img = null;
+				if (!request.getParameter("imageId").equals("-1")) {
+					int imageId = Integer.parseInt(request
+							.getParameter("imageId"));
+					img = imageDao.getImageById(imageId);
+				} else {
+					img = imageDao.getUserProfileImage((User) request
+							.getSession(false).getAttribute("user"));
+				}
 				request.setAttribute("active-image", img);
 				url = "/pages/private/imageDataDisplay.jsp";
 			}
