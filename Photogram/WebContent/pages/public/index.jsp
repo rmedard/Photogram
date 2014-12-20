@@ -5,7 +5,7 @@
 		<div class="row">
 			<%-- <%@include file="templates/sidebar.jsp" %> --%>
 			<jsp:include page="templates/sidebar.jsp" flush="true"/>
-			<div class="col-md-9">
+			<div class="col-md-9" hidden="true">
 				<h2 id="sec0">Content</h2>
 				<p>At Bootply we like to build simple Bootstrap templates that
 					utilize the code Bootstap CSS without a lot of customization. Sure

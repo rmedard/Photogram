@@ -5,8 +5,8 @@
 </div>
  -->
 <footer>
-	<div class="row">
-		<div class="col-lg-12">
+	<div class="footer">
+		<div class="container">
 			<p>Copyright © 2014 Aimé Kayiranga</p>
 		</div>
 	</div>
