@@ -1,4 +1,4 @@
-<%-- <%@include file="/pages/public/templates/header.jsp"%> --%>
+<%@page import="be.kayiranga.model.User"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/pages/public/templates/header.jsp" />
 <div class="container">
@@ -6,28 +6,26 @@
 		<%-- <%@include file="/pages/public/templates/sidebar.jsp"%> --%>
 		<jsp:include page="/pages/public/templates/sidebar.jsp" />
 		<div class="col-md-9">
-
-			<%
-				boolean newUser;
-				if (request.getSession(false).getAttribute("user") != null) {
-					newUser = false;
-				}else{
-					newUser = true;
-				}
-				String name = "";
-				String postname = "";
-				String username = "";
-				String email = "";
-				String password = "";
-				if (!newUser) {
-					name = request.getAttribute("name").toString();
-					postname = request.getAttribute("postname").toString();
-					username = request.getAttribute("username").toString();
-					email = request.getAttribute("email").toString();
-					password = request.getAttribute("password").toString();
-				}
-			%>
-			<form class="form-horizontal" role="form" action="editAddUser" method="post">
+			<c:choose>
+				<c:when test="${sessionScope.user eq null }">
+					<c:set var="name" value="" />
+					<c:set var="postname" value="" />
+					<c:set var="username" value="" />
+					<c:set var="email" value="" />
+					<c:set var="password" value="" />
+				</c:when>
+				<c:otherwise>
+					<c:set var="user" value="${sessionScope.user}" />
+					<c:set var="name" value="${user.name }" />
+					<c:set var="postname" value="${user.postname }" />
+					<c:set var="username" value="${user.username }" />
+					<c:set var="email" value="${user.email }" />
+					<c:set var="password" value="${user.password }" />
+				</c:otherwise>
+			</c:choose>
+			<form class="form-horizontal" role="form"
+				action="${pageContext.request.contextPath}/editAddUser?newRecord=${sessionScope.user eq null}"
+				method="post">
 				<div class="form-group">
 					<label for="name" class="col-sm-2 control-label">Nom</label>
 					<div class="col-sm-10">
@@ -80,4 +78,3 @@
 	</div>
 </div>
 <jsp:include page="/pages/public/templates/footer.jsp" />
-<%-- <%@include file="/pages/public/templates/footer.jsp"%> --%>

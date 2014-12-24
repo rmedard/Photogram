@@ -56,9 +56,9 @@ public class ImageController extends HttpServlet {
 			String url = "";
 			if (userPath.equalsIgnoreCase("/displayProfilePic")) {
 				String userId = request.getParameter("userId");
-				if(userId == null || userId.equals("")){
-					
-				}else{
+				if (userId == null || userId.equals("")) {
+
+				} else {
 					int uId = Integer.parseInt(request.getParameter("userId"));
 					Image profilePic = imageDao.getUserProfileImage(userDao
 							.findUserById(uId));
@@ -68,7 +68,7 @@ public class ImageController extends HttpServlet {
 						url = "/displayImg?imageId=-1";
 					}
 				}
-				
+
 			}
 			try {
 				request.getRequestDispatcher(url).forward(request, response);
@@ -85,20 +85,21 @@ public class ImageController extends HttpServlet {
 		if (userPath.equalsIgnoreCase("/editImage")) {
 			if (request.getParameter("imageId") != null) {
 				int imageId = Integer.parseInt(request.getParameter("imageId"));
+				Image updatedImage = imageDao.getImageById(imageId);
 				Image image = new Image();
 				image.setImageId(imageId);
+				image.setImagePath(updatedImage.getImagePath());
 				image.setDescription(request.getParameter("descriptionTxt"));
-				image.setOwnerId(userDao.findUserById(
-						imageDao.getImageById(imageId).getOwnerId())
-						.getUserId());
+				image.setOwnerId(userDao
+						.findUserById(updatedImage.getOwnerId()).getUserId());
 				image.setPublicPic(booleanParser(request
 						.getParameter("publicRd")));
 				image.setProfilePic(booleanParser(request
 						.getParameter("profileRd")));
-				if (!image.equals(imageDao.getImageById(imageId))) {
+				if (!image.equals(updatedImage)) {
 					imageDao.updateImage(image);
 					request.setAttribute("active-image",
-							imageDao.getImageById(imageId));
+							imageDao.getImageById(image.getImageId()));
 				}
 			}
 			url = "/pages/private/imageDataDisplay.jsp?";

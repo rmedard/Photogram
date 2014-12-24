@@ -25,7 +25,15 @@
 					<h3>Nom: ${user.name}</h3>
 					<h3>Prénom: ${user.postname}</h3>
 					<h3>Emai: ${user.email}</h3>
-					Other details <a href="<c:url value="/editAddUser"/>"
+					<c:choose>
+						<c:when test="${user.name eq null}">
+							<c:set var="editOption" value="false" />
+						</c:when>
+						<c:otherwise>
+							<c:set var="editOption" value="true" />
+						</c:otherwise>
+					</c:choose>
+					<a href="<c:url value="/pages/public/editAddUser.jsp"/>"
 						class="btn btn-default">Modifier</a>
 				</div>
 			</div>

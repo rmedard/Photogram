@@ -53,7 +53,7 @@ public class ImageDaoImpl implements ImageDao {
 
 	@Override
 	public void updateImage(Image image) {
-		String query = "UPDATE images SET isProfilePic = ?, "
+		String query = "UPDATE images SET imagePath = ?, isProfilePic = ?, "
 				+ "isPublic = ?, description = ? WHERE imageId = ?";
 		PreparedStatement ps = null;
 		try (Connection connection = ConnectionManager.getConnection()) {
@@ -64,10 +64,11 @@ public class ImageDaoImpl implements ImageDao {
 				userDao.setProfileImage(
 						userDao.findUserById(image.getOwnerId()), image);
 			}
-			ps.setBoolean(1, image.isProfilePic());
-			ps.setBoolean(2, image.isPublicPic());
-			ps.setString(3, image.getDescription());
-			ps.setInt(4, image.getImageId());
+			ps.setString(1, image.getImagePath());
+			ps.setBoolean(2, image.isProfilePic());
+			ps.setBoolean(3, image.isPublicPic());
+			ps.setString(4, image.getDescription());
+			ps.setInt(5, image.getImageId());
 			ps.executeUpdate();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {

@@ -112,7 +112,8 @@ public class PublicUserController extends HttpServlet {
 
 		else if (userPath.equals("/editAddUser")) {
 			HttpSession session = request.getSession(false);
-			if (session != null && session.getAttribute("user") != null) {
+			String reqParam = request.getParameter("newRecord");
+			if (reqParam != null && reqParam.equals("false")) {
 				User user = new User();
 				User updatedUser = (User) session.getAttribute("user");
 				user.setUserId(updatedUser.getUserId());
@@ -148,13 +149,22 @@ public class PublicUserController extends HttpServlet {
 						if (f.exists() && f.isDirectory()) {
 							File updatedDir = new File(user.getUserDir());
 							f.renameTo(updatedDir);
+
+						}
+						// Rename user images pathnames
+						for (Image image : imageDao.getImagesByUser(user)) {
+							image.setImagePath(user.getUserDir()+"\\"
+									+ image.getImagePath().substring(
+											image.getImagePath().lastIndexOf(
+													"\\")));
+							imageDao.updateImage(image);
 						}
 					}
 				}
 				userDao.updateUser(user);
 				session.setAttribute("user", user);
 				// request.setAttribute("user", user);
-			} else {
+			} else if (reqParam != null && reqParam.equals("true")) {
 				User user = new User();
 				user.setName(request.getParameter("nameTxt"));
 				user.setPostname(request.getParameter("postnameTxt"));
@@ -175,6 +185,7 @@ public class PublicUserController extends HttpServlet {
 				}
 				session.setAttribute("user", user);
 			}
+			// url = "/pages/public/editAddUser.jsp";
 			url = "/pages/private/displayUserProfile.jsp";
 		} else if (userPath.equalsIgnoreCase("/uploadImage")) {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
