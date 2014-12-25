@@ -4,6 +4,11 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
 	<display-name>Photogram</display-name>
+	<listener>
+		<description>Initialize Application with existing users</description>
+		<display-name>StartupContextListener</display-name>
+		<listener-class>be.kayiranga.controller.StartupContextListener</listener-class>
+	</listener>
 	<welcome-file-list>
 		<welcome-file>pages/public/index.jsp</welcome-file>
 	</welcome-file-list>

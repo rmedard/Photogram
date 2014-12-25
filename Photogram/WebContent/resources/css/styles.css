@@ -40,6 +40,22 @@ html, body {
 	height: 165px;
 	overflow: hidden;
 }
-.photo-thumbnail a img{
+
+.photo-thumbnail a img {
 	width: 100%;
+}
+
+#allUsers>li {
+	list-style-type: none;
+}
+
+#allUsers>li>div>img {
+	width: 32px;
+	height: 32px;
+	overflow: hidden;
+}
+.user-in-list{
+	border: 1px solid #ebebeb;
+	margin-bottom: 5px;
+	padding-right: 5px;
 }

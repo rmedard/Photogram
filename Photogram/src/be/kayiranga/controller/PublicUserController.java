@@ -40,8 +40,7 @@ public class PublicUserController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
 		String url = "";
-		if (userPath.equals("/")) {
-		} else if (userPath.equals("/images")) {
+		if (userPath.equals("/images")) {
 			if (request.getParameter("userId") != null) {
 				int userId = Integer.parseInt(request.getParameter("userId"));
 				List<Image> userImages = imageDao.getImagesByUser(userDao
@@ -153,7 +152,8 @@ public class PublicUserController extends HttpServlet {
 						}
 						// Rename user images pathnames
 						for (Image image : imageDao.getImagesByUser(user)) {
-							image.setImagePath(user.getUserDir()+"\\"
+							image.setImagePath(user.getUserDir()
+									+ "\\"
 									+ image.getImagePath().substring(
 											image.getImagePath().lastIndexOf(
 													"\\")));
