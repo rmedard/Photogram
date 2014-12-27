@@ -17,8 +17,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import be.kayiranga.dao.FollowshipDao;
 import be.kayiranga.dao.ImageDao;
 import be.kayiranga.dao.UserDao;
+import be.kayiranga.daoImpl.FollowshipDaoImpl;
 import be.kayiranga.daoImpl.ImageDaoImpl;
 import be.kayiranga.daoImpl.UserDaoImpl;
 import be.kayiranga.model.Image;
@@ -29,11 +31,13 @@ public class PublicUserController extends HttpServlet {
 
 	private UserDao userDao;
 	private ImageDao imageDao;
+	private FollowshipDao followshipDao;
 
 	public PublicUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		imageDao = new ImageDaoImpl();
+		followshipDao = new FollowshipDaoImpl();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -93,11 +97,13 @@ public class PublicUserController extends HttpServlet {
 				if (loggedInUser != null) {
 					HttpSession session = request.getSession(true);
 					session.setAttribute("user", loggedInUser);
+					session.setAttribute("userId", loggedInUser.getUserId());
 
 					List<Image> userImages = new ArrayList<Image>();
 					userImages = imageDao.getImagesByUser(loggedInUser);
-
 					session.setAttribute("images", userImages);
+					sortFollowships(loggedInUser, session);
+
 					request.setAttribute("user", loggedInUser);
 					request.setAttribute("username", loggedInUser.getUsername());
 					request.setAttribute("images", userImages);
@@ -239,5 +245,23 @@ public class PublicUserController extends HttpServlet {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void sortFollowships(User user, HttpSession s) {
+		List<User> allUsers = userDao.findAllUsers();
+		List<User> followees = new ArrayList<User>();
+		List<User> nonfollowees = new ArrayList<User>();
+		for (User u : allUsers) {
+			if (!user.equals(u)) {
+				if (followshipDao.checkFollowship(user.getUserId(),
+						u.getUserId())) {
+					followees.add(u);
+				} else {
+					nonfollowees.add(u);
+				}
+			}
+		}
+		s.setAttribute("followees", followees);
+		s.setAttribute("nonfollowees", nonfollowees);
 	}
 }

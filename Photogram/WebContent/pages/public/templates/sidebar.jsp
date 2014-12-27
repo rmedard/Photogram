@@ -14,44 +14,48 @@
 	<div class="well" id="users-list">
 		<header>Les utilisateurs</header>
 		<ul id="allUsers">
-			<c:forEach var="user" items="${applicationScope.allUsers}">
-				<c:choose>
-					<c:when test="${sessionScope.user ne user}">
+			<c:choose>
+				<c:when test="${sessionScope.user ne null}">
+					<c:forEach items="${sessionScope.followees}" var="followee">
+						<li>
+							<div class="well well-sm">
+								<img
+									src="${pageContext.request.contextPath}/displayProfilePic?userId=${followee.userId}"
+									class="img-thumbnail" />
+								<c:out value="${followee.username}" />
+								<a
+									href="${pageContext.request.contextPath}/unfollow?ferId=${sessionScope.userId}&fedId=${followee.userId}"
+									class="btn" style="float: right;"><c:out value="Unfollow" /></a>
+							</div>
+						</li>
+					</c:forEach>
+					<c:forEach items="${sessionScope.nonfollowees}" var="nonfollowee">
+						<li>
+							<div class="well well-sm">
+								<img
+									src="${pageContext.request.contextPath}/displayProfilePic?userId=${nonfollowee.userId}"
+									class="img-thumbnail" />
+								<c:out value="${nonfollowee.username}" />
+								<a
+									href="${pageContext.request.contextPath}/follow?ferId=${sessionScope.userId}&fedId=${followee.userId}"
+									class="btn" style="float: right;"><c:out value="Follow" /></a>
+							</div>
+						</li>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<c:forEach var="user" items="${applicationScope.allUsers}">
 						<li>
 							<div class="well well-sm">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${user.userId}"
-									class="img-thumbnail" hidden="true" />
+									class="img-thumbnail" />
 								<c:out value="${user.username}" />
-								<c:set var="follower" value="sessionScope.user" />
-								<c:set var="followerId" value="${follower.userId}"/>
-								<c:set var="followedId" value="${user.userId}" />
-								<%
-									User follower = (User)pageContext
-														.getAttribute("follower");
-												User followed = (User) pageContext
-														.getAttribute("followed");
-												FollowshipDao fdao = new FollowshipDaoImpl();
-												Boolean follows = fdao.checkFollowship(follower,
-														followed);
-												pageContext.setAttribute("follows", follows);
-								%>
-								<c:choose>
-									<c:when test="follows">
-										<a href="" class="btn" style="float: right;"><c:out
-												value="Unfollow" /></a>
-									</c:when>
-									<c:otherwise>
-										<a href="" class="btn" style="float: right;"><c:out
-												value="Follow" /></a>
-									</c:otherwise>
-								</c:choose>
-
 							</div>
 						</li>
-					</c:when>
-				</c:choose>
-			</c:forEach>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
 		</ul>
 	</div>
 </div>
