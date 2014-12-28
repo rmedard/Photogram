@@ -14,37 +14,43 @@
 					<legend>Description</legend>
 					<c:out value="${image.description}" />
 				</fieldset>
-				<fieldset>
-					<legend>Visibilité</legend>
-					<div class="control-group">
-						<label class="control-label">Photo publique:</label>
-						<c:choose>
-							<c:when test="${image.publicPic}">
-								<c:out value="Oui" />
-							</c:when>
-							<c:otherwise>
-								<c:out value="Non"></c:out>
-							</c:otherwise>
-						</c:choose>
+				<%-- <c:set var="isOwner" value="${requestScope['owner']}"/> --%>
+				<c:if test="${requestScope['owner']}">
+					<div class="user-private-edit">
+						<fieldset>
+							<legend>Visibilité</legend>
+							<div class="control-group">
+								<label class="control-label">Photo publique:</label>
+								<c:choose>
+									<c:when test="${image.publicPic}">
+										<c:out value="Oui" />
+									</c:when>
+									<c:otherwise>
+										<c:out value="Non"></c:out>
+									</c:otherwise>
+								</c:choose>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Photo de profile:</label>
+								<c:choose>
+									<c:when test="${image.profilePic}">
+										<c:out value="Oui" />
+									</c:when>
+									<c:otherwise>
+										<c:out value="Non"></c:out>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</fieldset>
+						<fieldset>
+							<div class="control-group">
+								<button class="btn btn-default" data-toggle="modal"
+									data-target="#image-data-edit">Modifier</button>
+							</div>
+						</fieldset>
 					</div>
-					<div class="control-group">
-						<label class="control-label">Photo de profile:</label>
-						<c:choose>
-							<c:when test="${image.profilePic}">
-								<c:out value="Oui" />
-							</c:when>
-							<c:otherwise>
-								<c:out value="Non"></c:out>
-							</c:otherwise>
-						</c:choose>
-					</div>
-				</fieldset>
-				<fieldset>
-					<div class="control-group">
-						<button class="btn btn-default" data-toggle="modal"
-							data-target="#image-data-edit">Modifier</button>
-					</div>
-				</fieldset>
+				</c:if>
+
 			</div>
 		</div>
 		<div class="modal fade" id="image-data-edit" tabindex="-1"
@@ -87,20 +93,20 @@
 							<fieldset>
 								<legend>Photo de profil</legend>
 								<c:choose>
-								<c:when test="${image.profilePic}">
-								<label class="radio-inline"><input type="radio"
-									name="profileRd" value="true" checked="checked">Oui</label> <label
-									class="radio-inline"><input type="radio"
-									name="profileRd" value="false">Non</label>
-								</c:when>
-								<c:otherwise>
-								<label class="radio-inline"><input type="radio"
-									name="profileRd" value="true">Oui</label> <label
-									class="radio-inline"><input type="radio" name="profileRd"
-											value="false" checked="checked">Non</label>
-								</c:otherwise>
+									<c:when test="${image.profilePic}">
+										<label class="radio-inline"><input type="radio"
+											name="profileRd" value="true" checked="checked">Oui</label>
+										<label class="radio-inline"><input type="radio"
+											name="profileRd" value="false">Non</label>
+									</c:when>
+									<c:otherwise>
+										<label class="radio-inline"><input type="radio"
+											name="profileRd" value="true">Oui</label>
+										<label class="radio-inline"><input type="radio"
+											name="profileRd" value="false" checked="checked">Non</label>
+									</c:otherwise>
 								</c:choose>
-								
+
 							</fieldset>
 						</div>
 						<div class="modal-footer">

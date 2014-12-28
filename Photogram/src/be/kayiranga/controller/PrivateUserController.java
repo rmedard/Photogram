@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import be.kayiranga.dao.FollowshipDao;
 import be.kayiranga.dao.UserDao;
@@ -28,18 +29,26 @@ public class PrivateUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
+
 		if (userPath.equals("/follow")) {
-			User follower = userDao.findUserById(Integer.parseInt(request
-					.getParameter("ferId")));
-			User followed = userDao.findUserById(Integer.parseInt(request
-					.getParameter("fedId")));
-			followshipDao.createFollowship(follower, followed);
+
+			HttpSession session = request.getSession(false);
+			if (session.getAttribute("user") != null) {
+				User follower = userDao.findUserById(Integer.parseInt(request
+						.getParameter("ferid")));
+				User followed = userDao.findUserById(Integer.parseInt(request
+						.getParameter("fedid")));
+				adaptFollowships(session, follower, followed, true);
+			}
 		} else if (userPath.equals("/unfollow")) {
-			User follower = userDao.findUserById(Integer.parseInt(request
-					.getParameter("ferId")));
-			User followed = userDao.findUserById(Integer.parseInt(request
-					.getParameter("fedId")));
-			followshipDao.deleteFollowship(follower, followed);
+			HttpSession session = request.getSession(false);
+			if (session.getAttribute("user") != null) {
+				User follower = userDao.findUserById(Integer.parseInt(request
+						.getParameter("ferid")));
+				User followed = userDao.findUserById(Integer.parseInt(request
+						.getParameter("fedid")));
+				adaptFollowships(session, follower, followed, false);
+			}
 		}
 		String url = "/pages/private/displayUserProfile.jsp";
 		try {
@@ -63,4 +72,16 @@ public class PrivateUserController extends HttpServlet {
 		}
 	}
 
+	private void adaptFollowships(HttpSession s, User follower, User followed,
+			boolean seekFollow) {
+		if (followshipDao.checkFollowship(follower.getUserId(),
+				followed.getUserId())
+				&& !seekFollow) {
+			followshipDao.deleteFollowship(follower, followed);
+		} else if (!followshipDao.checkFollowship(follower.getUserId(),
+				followed.getUserId()) && seekFollow) {
+			followshipDao.createFollowship(follower, followed);
+		}
+		followshipDao.sortFollowships(follower, s);
+	}
 }

@@ -68,7 +68,14 @@ public class ImageController extends HttpServlet {
 						url = "/displayImg?imageId=-1";
 					}
 				}
-
+			} else if (userPath.equals("/displayFriendImage")) {
+				String imageId = request.getParameter("imageId");
+				if ( imageId != null && !imageId.equals("")) {
+					int imgId = Integer.parseInt(imageId);
+					if(imageDao.getImageById(imgId).isPublicPic()){
+						url = "/displayImg?imageId" + imgId;
+					}
+				}
 			}
 			try {
 				request.getRequestDispatcher(url).forward(request, response);

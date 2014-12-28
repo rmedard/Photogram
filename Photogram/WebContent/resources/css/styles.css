@@ -54,8 +54,8 @@ html, body {
 	height: 32px;
 	overflow: hidden;
 }
-.user-in-list{
+
+.usercliche{
 	border: 1px solid #ebebeb;
-	margin-bottom: 5px;
-	padding-right: 5px;
+	margin-bottom: 3px;
 }

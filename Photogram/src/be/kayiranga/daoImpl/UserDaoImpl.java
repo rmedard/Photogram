@@ -175,10 +175,10 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public List<User> findUserFollowers(User user) {
+	public List<User> findUserFollowees(User user) {
 		List<User> followers = new ArrayList<User>();
 		String query = "SELECT * FROM users AS u LEFT JOIN followships AS "
-				+ "f ON u.userId = f.followerId WHERE f.followedId=?";
+				+ "f ON u.userId = f.followedId WHERE f.followerId=?";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try (Connection connection = ConnectionManager.getConnection()) {
@@ -239,7 +239,8 @@ public class UserDaoImpl implements UserDao {
 		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
 			connection.setAutoCommit(false);
-			if (user != null && image!= null && image.getOwnerId() == user.getUserId()) {
+			if (user != null && image != null
+					&& image.getOwnerId() == user.getUserId()) {
 				for (Image img : new ImageDaoImpl().getImagesByUser(user)) {
 					if (image.equals(img)) {
 						if (!image.isProfilePic()) {

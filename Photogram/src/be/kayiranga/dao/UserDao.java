@@ -20,7 +20,7 @@ public interface UserDao {
 
 	public abstract List<User> findUserByToken(String token);
 
-	public abstract List<User> findUserFollowers(User user);
+	public abstract List<User> findUserFollowees(User user);
 
 	public abstract void follow(User follower, User followed);
 

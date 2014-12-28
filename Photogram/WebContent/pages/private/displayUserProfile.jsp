@@ -44,8 +44,7 @@
 						<div class="col-md-3">
 							<div class="photo-thumbnail">
 								<a
-									href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}">
-
+									href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}&owner=${true}">
 									<img
 									src="${pageContext.request.contextPath}/displayImg?imageId=${img.imageId}"
 									class="img-thumbnail" />
@@ -63,6 +62,33 @@
 						<input type="file" name="file" accept="image/*" /> <br /> <input
 							type="submit" value="Télécharger" />
 					</form>
+				</fieldset>
+			</div>
+			<div class="row">
+				<fieldset>
+					<legend>Les photos de mes amis</legend>
+					<c:forEach var="followee" items="${sessionScope['followees']}">
+						<fieldset>
+							<legend>
+								<c:out value="${followee.username}" />
+							</legend>
+							<c:forEach var="img" items='${sessionScope["followeeImages"]}'>
+								<c:if
+									test="${followee.userId eq img.ownerId and img.publicPic}">
+									<div class="col-md-3">
+										<div class="photo-thumbnail">
+											<a
+												href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}&owner=${false}">
+												<c:set var="owner" value="${false}" scope="request" /> <img
+												src="${pageContext.request.contextPath}/displayFriendImage?imageId=${img.imageId}"
+												class="img-thumbnail" />
+											</a>
+										</div>
+									</div>
+								</c:if>
+							</c:forEach>
+						</fieldset>
+					</c:forEach>
 				</fieldset>
 			</div>
 		</div>

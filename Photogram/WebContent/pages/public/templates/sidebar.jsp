@@ -18,27 +18,36 @@
 				<c:when test="${sessionScope.user ne null}">
 					<c:forEach items="${sessionScope.followees}" var="followee">
 						<li>
-							<div class="well well-sm">
+							<div class="usercliche">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${followee.userId}"
 									class="img-thumbnail" />
 								<c:out value="${followee.username}" />
-								<a
-									href="${pageContext.request.contextPath}/unfollow?ferId=${sessionScope.userId}&fedId=${followee.userId}"
-									class="btn" style="float: right;"><c:out value="Unfollow" /></a>
+
+								<c:url value="/unfollow" var="unfollowURL">
+									<c:param name="ferid" value="${sessionScope.userId}" />
+									<c:param name="fedid" value="${followee.userId}" />
+								</c:url>
+								<a href="${unfollowURL}" class="btn" style="float: right;"><c:out
+										value="Unfollow" /></a>
 							</div>
 						</li>
 					</c:forEach>
 					<c:forEach items="${sessionScope.nonfollowees}" var="nonfollowee">
 						<li>
-							<div class="well well-sm">
+							<div class="usercliche">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${nonfollowee.userId}"
 									class="img-thumbnail" />
 								<c:out value="${nonfollowee.username}" />
-								<a
-									href="${pageContext.request.contextPath}/follow?ferId=${sessionScope.userId}&fedId=${followee.userId}"
-									class="btn" style="float: right;"><c:out value="Follow" /></a>
+
+								<c:url value="/follow" var="followURL">
+									<c:param name="ferid" value="${sessionScope.userId}" />
+									<c:param name="fedid" value="${nonfollowee.userId}" />
+								</c:url>
+
+								<a href="${followURL}" class="btn" style="float: right;"><c:out
+										value="Follow" /></a>
 							</div>
 						</li>
 					</c:forEach>

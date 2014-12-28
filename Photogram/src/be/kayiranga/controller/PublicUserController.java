@@ -71,6 +71,13 @@ public class PublicUserController extends HttpServlet {
 					img = imageDao.getUserProfileImage((User) request
 							.getSession(false).getAttribute("user"));
 				}
+				if(request.getParameter("owner") != null){
+					if(Boolean.parseBoolean(request.getParameter("owner"))){
+						request.setAttribute("owner", true);
+					}else{
+						request.setAttribute("owner", false);
+					}
+				}
 				request.setAttribute("active-image", img);
 				url = "/pages/private/imageDataDisplay.jsp";
 			}
@@ -102,7 +109,7 @@ public class PublicUserController extends HttpServlet {
 					List<Image> userImages = new ArrayList<Image>();
 					userImages = imageDao.getImagesByUser(loggedInUser);
 					session.setAttribute("images", userImages);
-					sortFollowships(loggedInUser, session);
+					followshipDao.sortFollowships(loggedInUser, session);
 
 					request.setAttribute("user", loggedInUser);
 					request.setAttribute("username", loggedInUser.getUsername());
@@ -169,7 +176,6 @@ public class PublicUserController extends HttpServlet {
 				}
 				userDao.updateUser(user);
 				session.setAttribute("user", user);
-				// request.setAttribute("user", user);
 			} else if (reqParam != null && reqParam.equals("true")) {
 				User user = new User();
 				user.setName(request.getParameter("nameTxt"));
@@ -191,7 +197,6 @@ public class PublicUserController extends HttpServlet {
 				}
 				session.setAttribute("user", user);
 			}
-			// url = "/pages/public/editAddUser.jsp";
 			url = "/pages/private/displayUserProfile.jsp";
 		} else if (userPath.equalsIgnoreCase("/uploadImage")) {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -241,27 +246,10 @@ public class PublicUserController extends HttpServlet {
 			}
 		}
 		try {
+			getServletContext().setAttribute("allUsers", userDao.findAllUsers());
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	private void sortFollowships(User user, HttpSession s) {
-		List<User> allUsers = userDao.findAllUsers();
-		List<User> followees = new ArrayList<User>();
-		List<User> nonfollowees = new ArrayList<User>();
-		for (User u : allUsers) {
-			if (!user.equals(u)) {
-				if (followshipDao.checkFollowship(user.getUserId(),
-						u.getUserId())) {
-					followees.add(u);
-				} else {
-					nonfollowees.add(u);
-				}
-			}
-		}
-		s.setAttribute("followees", followees);
-		s.setAttribute("nonfollowees", nonfollowees);
 	}
 }

@@ -7,22 +7,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import be.kayiranga.dao.FollowshipDao;
+import be.kayiranga.dao.ImageDao;
 import be.kayiranga.dao.UserDao;
+import be.kayiranga.model.Image;
 import be.kayiranga.model.User;
 
 public class FollowshipDaoImpl implements FollowshipDao {
 
 	private UserDao userDao;
+	private ImageDao imageDao;
 
 	public FollowshipDaoImpl() {
 		super();
 		userDao = new UserDaoImpl();
+		imageDao = new ImageDaoImpl();
 	}
 
 	@Override
 	public void createFollowship(User follower, User followed) {
-		String query = "INSERT INTO followships(followshipId, followerId, followedId) VALUES(?,?,?)";
+		String query = "INSERT INTO followships(followerId, followedId) VALUES(?,?)";
 		PreparedStatement ps = null;
 		try (Connection con = ConnectionManager.getConnection()) {
 			con.setAutoCommit(false);
@@ -49,6 +55,8 @@ public class FollowshipDaoImpl implements FollowshipDao {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally{
+			close(ps);
 		}
 	}
 
@@ -81,7 +89,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 				+ "WHERE followerId = ? AND followedId = ?";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		Boolean followshipExists = null;
+		boolean followshipExists = false;
 		try (Connection con = ConnectionManager.getConnection()) {
 			ps = con.prepareStatement(query);
 			ps.setInt(1, followerId);
@@ -100,6 +108,28 @@ public class FollowshipDaoImpl implements FollowshipDao {
 			close(ps);
 		}
 		return followshipExists;
+	}
+	
+	@Override
+	public void sortFollowships(User user, HttpSession s) {
+		List<User> allUsers = userDao.findAllUsers();
+		List<User> followees = new ArrayList<User>();
+		List<User> nonfollowees = new ArrayList<User>();
+		List<Image> followeeImages = new ArrayList<Image>();
+		for (User u : allUsers) {
+			if (!user.equals(u)) {
+				if (checkFollowship(user.getUserId(),
+						u.getUserId())) {
+					followees.add(u);
+					followeeImages.addAll(imageDao.getImagesByUser(u));
+				} else {
+					nonfollowees.add(u);
+				}
+			}
+		}
+		s.setAttribute("followees", followees);
+		s.setAttribute("nonfollowees", nonfollowees);
+		s.setAttribute("followeeImages", followeeImages);
 	}
 
 	private void close(ResultSet rs) {
