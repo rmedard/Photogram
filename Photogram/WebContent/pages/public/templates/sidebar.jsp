@@ -21,7 +21,7 @@
 							<div class="usercliche">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${followee.userId}"
-									class="img-thumbnail" />
+									class="img-thumbnail img-circle" />
 								<c:out value="${followee.username}" />
 
 								<c:url value="/unfollow" var="unfollowURL">
@@ -38,7 +38,7 @@
 							<div class="usercliche">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${nonfollowee.userId}"
-									class="img-thumbnail" />
+									class="img-thumbnail img-circle" />
 								<c:out value="${nonfollowee.username}" />
 
 								<c:url value="/follow" var="followURL">

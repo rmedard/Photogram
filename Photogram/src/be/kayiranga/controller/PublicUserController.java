@@ -33,11 +33,15 @@ public class PublicUserController extends HttpServlet {
 	private ImageDao imageDao;
 	private FollowshipDao followshipDao;
 
+	// private List<User> allUsers;
+
+	// @SuppressWarnings("unchecked")
 	public PublicUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		imageDao = new ImageDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
+		// allUsers = (List<User>)getServletContext().getAttribute("allUsers");
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -71,10 +75,10 @@ public class PublicUserController extends HttpServlet {
 					img = imageDao.getUserProfileImage((User) request
 							.getSession(false).getAttribute("user"));
 				}
-				if(request.getParameter("owner") != null){
-					if(Boolean.parseBoolean(request.getParameter("owner"))){
+				if (request.getParameter("owner") != null) {
+					if (Boolean.parseBoolean(request.getParameter("owner"))) {
 						request.setAttribute("owner", true);
-					}else{
+					} else {
 						request.setAttribute("owner", false);
 					}
 				}
@@ -82,7 +86,6 @@ public class PublicUserController extends HttpServlet {
 				url = "/pages/private/imageDataDisplay.jsp";
 			}
 		}
-
 		try {
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
@@ -246,7 +249,8 @@ public class PublicUserController extends HttpServlet {
 			}
 		}
 		try {
-			getServletContext().setAttribute("allUsers", userDao.findAllUsers());
+			getServletContext()
+					.setAttribute("allUsers", userDao.findAllUsers());
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();

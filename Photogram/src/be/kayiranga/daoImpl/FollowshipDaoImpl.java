@@ -21,7 +21,6 @@ public class FollowshipDaoImpl implements FollowshipDao {
 	private ImageDao imageDao;
 
 	public FollowshipDaoImpl() {
-		super();
 		userDao = new UserDaoImpl();
 		imageDao = new ImageDaoImpl();
 	}

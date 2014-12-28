@@ -19,11 +19,14 @@ public class PrivateUserController extends HttpServlet {
 
 	private UserDao userDao;
 	private FollowshipDao followshipDao;
+//	private List<User> allUsers;
 
+//	@SuppressWarnings("unchecked")
 	public PrivateUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
+//		allUsers = (List<User>)getServletContext().getAttribute("allUsers");
 	}
 
 	protected void doGet(HttpServletRequest request,

@@ -8,11 +8,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
+import be.kayiranga.dao.FollowshipDao;
 import be.kayiranga.dao.UserDao;
 import be.kayiranga.model.Image;
 import be.kayiranga.model.User;
 
 public class UserDaoImpl implements UserDao {
+
+//	private FollowshipDao followshipDao;
+	
+	public UserDaoImpl() {
+//		followshipDao = new FollowshipDaoImpl();
+	}
 
 	@Override
 	public void createUser(User user) {
@@ -292,7 +302,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return u;
 	}
-
+	
 	private List<User> parseUsers(ResultSet rs) {
 		List<User> users = new ArrayList<User>();
 		try {
