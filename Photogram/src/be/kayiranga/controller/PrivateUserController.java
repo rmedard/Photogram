@@ -29,7 +29,7 @@ public class PrivateUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
-
+		String url = "";
 		if (userPath.equals("/follow")) {
 			HttpSession session = request.getSession(false);
 			if (session.getAttribute("user") != null) {
@@ -39,6 +39,7 @@ public class PrivateUserController extends HttpServlet {
 						.getParameter("fedid")));
 				adaptFollowships(session, follower, followed, true);
 			}
+			url = "/pages/private/displayUserProfile.jsp";
 		} else if (userPath.equals("/unfollow")) {
 			HttpSession session = request.getSession(false);
 			if (session.getAttribute("user") != null) {
@@ -48,8 +49,22 @@ public class PrivateUserController extends HttpServlet {
 						.getParameter("fedid")));
 				adaptFollowships(session, follower, followed, false);
 			}
+			url = "/pages/private/displayUserProfile.jsp";
+		} else if (userPath.equals("/deleteUser")) {
+			HttpSession session = request.getSession(false);
+			if (session.getAttribute("user") != null) {
+				User user = userDao.findUserById(Integer.parseInt(request
+						.getParameter("userId")));
+				if (user != null) {
+					//Delete files...
+					userDao.deleteUser(user);
+					request.getServletContext().setAttribute("allUsers",
+							userDao.findAllUsers());
+					url = "/login?action=logout";
+				}
+			}
 		}
-		String url = "/pages/private/displayUserProfile.jsp";
+
 		try {
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {

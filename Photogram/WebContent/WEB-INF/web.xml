@@ -38,6 +38,10 @@
 		<servlet-name>privateUC</servlet-name>
 		<url-pattern>/unfollow</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>privateUC</servlet-name>
+		<url-pattern>/deleteUser</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>publicUC</servlet-name>
 		<servlet-class>be.kayiranga.controller.PublicUserController</servlet-class>

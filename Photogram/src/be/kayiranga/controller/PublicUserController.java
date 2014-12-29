@@ -61,7 +61,6 @@ public class PublicUserController extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
 				session.setAttribute("loggedIn", false);
-
 				sessions.remove(session);
 				session.invalidate();
 				session = request.getSession(true);

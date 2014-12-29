@@ -35,7 +35,9 @@
 								</c:otherwise>
 							</c:choose>
 							<a href="<c:url value="/pages/public/editAddUser.jsp"/>"
-								class="btn btn-default">Modifier</a>
+								class="btn btn-default">Modifier</a> <a
+								href="${pageContext.request.contextPath}/deleteUser?userId=${user.userId}"
+								class="btn btn-default">Supprimer</a>
 						</div>
 					</div>
 					<jsp:include page="/pages/private/templates/mesphotos.jsp"
