@@ -33,15 +33,11 @@ public class PublicUserController extends HttpServlet {
 	private ImageDao imageDao;
 	private FollowshipDao followshipDao;
 
-	// private List<User> allUsers;
-
-	// @SuppressWarnings("unchecked")
 	public PublicUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		imageDao = new ImageDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
-		// allUsers = (List<User>)getServletContext().getAttribute("allUsers");
 	}
 
 	protected void doGet(HttpServletRequest request,

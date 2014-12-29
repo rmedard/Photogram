@@ -31,7 +31,6 @@ public class ImageController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
 		String userPath = request.getServletPath();
 		if (userPath.equalsIgnoreCase("/displayImg")) {
 			String imageIdParam = request.getParameter("imageId");

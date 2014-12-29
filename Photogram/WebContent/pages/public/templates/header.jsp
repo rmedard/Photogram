@@ -33,8 +33,8 @@
 				<ul class="nav navbar-nav">
 					<li><a href="/Photogram/pages/private/displayUserProfile.jsp">Mon
 							profil</a></li>
-					<li><a href="#">Mes amis</a></li>
-					<li><a href="#">Mes photos</a></li>
+					<li><a href="/Photogram/pages/private/friends.jsp">Mes amis</a></li>
+					<li><a href="/Photogram/pages/private/photos.jsp">Mes photos</a></li>
 					<li><a href="/Photogram/pages/public/apropos.jsp">A propos</a></li>
 				</ul>
 				<c:choose>

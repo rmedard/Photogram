@@ -13,12 +13,12 @@
 	</div>
 	<div class="well" id="users-list">
 		<header>Les utilisateurs</header>
-		<ul id="allUsers">
+		<ul class="nav nav-stacked" id="allUsers">
 			<c:choose>
 				<c:when test="${sessionScope.user ne null}">
 					<c:forEach items="${sessionScope.followees}" var="followee">
 						<li>
-							<div class="usercliche">
+							<div class="">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${followee.userId}"
 									class="img-thumbnail img-circle" />
@@ -35,7 +35,7 @@
 					</c:forEach>
 					<c:forEach items="${sessionScope.nonfollowees}" var="nonfollowee">
 						<li>
-							<div class="usercliche">
+							<div class="">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${nonfollowee.userId}"
 									class="img-thumbnail img-circle" />
@@ -55,10 +55,10 @@
 				<c:otherwise>
 					<c:forEach var="user" items="${applicationScope.allUsers}">
 						<li>
-							<div class="well well-sm">
+							<div class="">
 								<img
 									src="${pageContext.request.contextPath}/displayProfilePic?userId=${user.userId}"
-									class="img-thumbnail" />
+									class="img-thumbnail img-circle" />
 								<c:out value="${user.username}" />
 							</div>
 						</li>

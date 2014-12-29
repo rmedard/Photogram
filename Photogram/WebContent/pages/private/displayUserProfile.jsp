@@ -2,7 +2,6 @@
 <%@page import="be.kayiranga.model.Image"%>
 <%@page import="java.util.List"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <jsp:include page="/pages/public/templates/header.jsp" />
 <div class="container">
 	<div class="row">
@@ -37,62 +36,9 @@
 						class="btn btn-default">Modifier</a>
 				</div>
 			</div>
-			<div class="row">
-				<fieldset>
-					<legend>Mes Photos</legend>
-					<c:forEach var="img" items='${sessionScope["images"]}'>
-						<div class="col-md-3">
-							<div class="photo-thumbnail">
-								<a
-									href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}&owner=${true}">
-									<img
-									src="${pageContext.request.contextPath}/displayImg?imageId=${img.imageId}"
-									class="img-thumbnail" />
-								</a>
-							</div>
-						</div>
-					</c:forEach>
-				</fieldset>
-			</div>
-			<div class="row">
-				<fieldset>
-					<legend>Ajouter des images</legend>
-					<form action="${pageContext.request.contextPath}/uploadImage"
-						method="post" enctype="multipart/form-data">
-						<input type="file" name="file" accept="image/*" /> <br /> <input
-							type="submit" value="Télécharger" />
-					</form>
-				</fieldset>
-			</div>
-			<div class="row">
-				<fieldset>
-					<legend>Les photos de mes amis</legend>
-					<c:forEach var="followee" items="${sessionScope['followees']}">
-						<fieldset>
-							<legend>
-								<c:out value="${followee.username}" />
-							</legend>
-							<c:forEach var="img" items='${sessionScope["followeeImages"]}'>
-								<c:if
-									test="${followee.userId eq img.ownerId and img.publicPic}">
-									<div class="col-md-3">
-										<div class="photo-thumbnail">
-											<a
-												href="${pageContext.request.contextPath}/imagedatadisplay?imageId=${img.imageId}&owner=${false}">
-												<c:set var="owner" value="${false}" scope="request" /> <img
-												src="${pageContext.request.contextPath}/displayFriendImage?imageId=${img.imageId}"
-												class="img-thumbnail" />
-											</a>
-										</div>
-									</div>
-								</c:if>
-							</c:forEach>
-						</fieldset>
-					</c:forEach>
-				</fieldset>
-			</div>
+			<jsp:include page="/pages/private/templates/mesphotos.jsp" flush="true"></jsp:include>
+			<jsp:include page="/pages/private/templates/mesamis.jsp" flush="true"></jsp:include>
 		</div>
 	</div>
-
 </div>
 <jsp:include page="/pages/public/templates/footer.jsp" />

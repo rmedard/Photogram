@@ -70,6 +70,10 @@
 		<servlet-name>publicUC</servlet-name>
 		<url-pattern>/imagedatadisplay</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>publicUC</servlet-name>
+		<url-pattern>/allUsers</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>imageController</servlet-name>
 		<servlet-class>be.kayiranga.controller.ImageController</servlet-class>
