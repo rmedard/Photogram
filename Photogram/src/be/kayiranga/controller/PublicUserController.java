@@ -61,7 +61,7 @@ public class PublicUserController extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
 				session.setAttribute("loggedIn", false);
-				
+
 				sessions.remove(session);
 				session.invalidate();
 				session = request.getSession(true);
@@ -103,8 +103,7 @@ public class PublicUserController extends HttpServlet {
 		String url = "";
 		@SuppressWarnings("unchecked")
 		List<HttpSession> sessions = (ArrayList<HttpSession>) request
-				.getServletContext()
-				.getAttribute("allUserSessions");
+				.getServletContext().getAttribute("allUserSessions");
 		if (userPath.equals("/login")) {
 			String action = request.getParameter("action");
 			if (action.equalsIgnoreCase("login")) {
@@ -202,13 +201,18 @@ public class PublicUserController extends HttpServlet {
 						+ "_"
 						+ RandomStringUtils.randomAlphanumeric(6));
 				userDao.createUser(user);
+				request.getServletContext().setAttribute("allUsers",
+						userDao.findAllUsers());
 				User newUser = userDao.login(user);
+				session = request.getSession(true);
 				File userDir = new File(user.getUserDir());
 				if (!userDir.exists()
 						|| (userDir.exists() && !userDir.isDirectory())) {
 					userDir.mkdir();
 				}
 				session.setAttribute("user", newUser);
+				sessions.add(session);
+				followshipDao.sortFollowships(newUser, session);
 			}
 			url = "/pages/private/displayUserProfile.jsp";
 		} else if (userPath.equalsIgnoreCase("/uploadImage")) {
@@ -258,7 +262,7 @@ public class PublicUserController extends HttpServlet {
 			}
 		}
 		try {
-			updateSessions.update(sessions);;
+			updateSessions.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();
