@@ -232,7 +232,6 @@ public class PublicUserController extends HttpServlet {
 										f.mkdirs();
 									}
 									File file = new File(f + "\\" + fileName);
-
 									fileItem.write(file);
 									Image image = new Image(file.getPath(),
 											FilenameUtils
