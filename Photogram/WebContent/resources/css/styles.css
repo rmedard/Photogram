@@ -55,7 +55,12 @@ html, body {
 	overflow: hidden;
 }
 
-.usercliche{
+.usercliche {
 	border: 1px solid #ebebeb;
 	margin-bottom: 3px;
+}
+
+img.full-image {
+	max-width: 650px;
+	max-height: auto;
 }

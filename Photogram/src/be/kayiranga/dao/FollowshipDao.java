@@ -10,8 +10,6 @@ public interface FollowshipDao {
 	public abstract void createFollowship(User follower, User followed);
 
 	public abstract void deleteFollowship(User follower, User followed);
-
-//	public abstract void sortFollowships(User user, HttpSession s);
 	
 	public abstract void sortFollowships(User user, HttpSession s);
 	

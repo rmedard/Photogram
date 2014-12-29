@@ -19,14 +19,11 @@ public class PrivateUserController extends HttpServlet {
 
 	private UserDao userDao;
 	private FollowshipDao followshipDao;
-//	private List<User> allUsers;
 
-//	@SuppressWarnings("unchecked")
 	public PrivateUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
-//		allUsers = (List<User>)getServletContext().getAttribute("allUsers");
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -34,7 +31,6 @@ public class PrivateUserController extends HttpServlet {
 		String userPath = request.getServletPath();
 
 		if (userPath.equals("/follow")) {
-
 			HttpSession session = request.getSession(false);
 			if (session.getAttribute("user") != null) {
 				User follower = userDao.findUserById(Integer.parseInt(request

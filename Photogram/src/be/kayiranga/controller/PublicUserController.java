@@ -32,18 +32,23 @@ public class PublicUserController extends HttpServlet {
 	private UserDao userDao;
 	private ImageDao imageDao;
 	private FollowshipDao followshipDao;
+	private UpdateSessions updateSessions;
 
 	public PublicUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		imageDao = new ImageDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
+		updateSessions = new UpdateSessions();
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
 		String url = "";
+		@SuppressWarnings("unchecked")
+		List<HttpSession> sessions = (ArrayList<HttpSession>) request
+				.getServletContext().getAttribute("allUserSessions");
 		if (userPath.equals("/images")) {
 			if (request.getParameter("userId") != null) {
 				int userId = Integer.parseInt(request.getParameter("userId"));
@@ -56,6 +61,8 @@ public class PublicUserController extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
 				session.setAttribute("loggedIn", false);
+				
+				sessions.remove(session);
 				session.invalidate();
 				session = request.getSession(true);
 			}
@@ -83,6 +90,7 @@ public class PublicUserController extends HttpServlet {
 			}
 		}
 		try {
+			updateSessions.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -93,6 +101,10 @@ public class PublicUserController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
 		String url = "";
+		@SuppressWarnings("unchecked")
+		List<HttpSession> sessions = (ArrayList<HttpSession>) request
+				.getServletContext()
+				.getAttribute("allUserSessions");
 		if (userPath.equals("/login")) {
 			String action = request.getParameter("action");
 			if (action.equalsIgnoreCase("login")) {
@@ -104,7 +116,9 @@ public class PublicUserController extends HttpServlet {
 					HttpSession session = request.getSession(true);
 					session.setAttribute("user", loggedInUser);
 					session.setAttribute("userId", loggedInUser.getUserId());
-
+					sessions.add(session);
+					request.getServletContext().setAttribute("allUserSessions",
+							sessions);
 					List<Image> userImages = new ArrayList<Image>();
 					userImages = imageDao.getImagesByUser(loggedInUser);
 					session.setAttribute("images", userImages);
@@ -160,7 +174,6 @@ public class PublicUserController extends HttpServlet {
 						if (f.exists() && f.isDirectory()) {
 							File updatedDir = new File(user.getUserDir());
 							f.renameTo(updatedDir);
-
 						}
 						// Rename user images pathnames
 						for (Image image : imageDao.getImagesByUser(user)) {
@@ -189,12 +202,13 @@ public class PublicUserController extends HttpServlet {
 						+ "_"
 						+ RandomStringUtils.randomAlphanumeric(6));
 				userDao.createUser(user);
+				User newUser = userDao.login(user);
 				File userDir = new File(user.getUserDir());
 				if (!userDir.exists()
 						|| (userDir.exists() && !userDir.isDirectory())) {
 					userDir.mkdir();
 				}
-				session.setAttribute("user", user);
+				session.setAttribute("user", newUser);
 			}
 			url = "/pages/private/displayUserProfile.jsp";
 		} else if (userPath.equalsIgnoreCase("/uploadImage")) {
@@ -245,8 +259,7 @@ public class PublicUserController extends HttpServlet {
 			}
 		}
 		try {
-			getServletContext()
-					.setAttribute("allUsers", userDao.findAllUsers());
+			updateSessions.update(sessions);;
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();

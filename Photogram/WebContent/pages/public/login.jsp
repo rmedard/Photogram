@@ -5,13 +5,13 @@
 <c:if test="${request.getSession(false).getAttribute(\"user\") ne null}">
 	<c:redirect url="/pages/private/displayUserProfile.jsp" />
 </c:if>
-
 <div class="container">
 	<div class="row">
 		<%@include file="/pages/public/templates/sidebar.jsp"%>
 
 		<div class="col-md-9">
-			<form class="form-horizontal" role="form" action="login?action=login"
+			<form class="form-horizontal" role="form"
+				action="${pageContext.request.contextPath}/login?action=login"
 				method="post">
 				<div class="form-group">
 					<label for="username" class="col-sm-2 control-label">Nom
@@ -42,6 +42,12 @@
 						<button type="submit" class="btn btn-default">Login</button>
 					</div>
 				</div>
+				<fieldset>
+					<legend>S'incrire</legend>
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="/Photogram/pages/public/editAddUser.jsp" class="btn btn-default">S'inscrire</a>
+					</div>
+				</fieldset>
 			</form>
 		</div>
 	</div>

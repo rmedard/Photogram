@@ -5,11 +5,14 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import be.kayiranga.dao.ImageDao;
 import be.kayiranga.dao.UserDao;
@@ -22,11 +25,13 @@ public class ImageController extends HttpServlet {
 
 	private ImageDao imageDao;
 	private UserDao userDao;
+	private UpdateSessions updateSessions;
 
 	public ImageController() {
 		super();
 		imageDao = new ImageDaoImpl();
 		userDao = new UserDaoImpl();
+		updateSessions = new UpdateSessions();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -88,6 +93,9 @@ public class ImageController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
 		String url = "";
+		@SuppressWarnings("unchecked")
+		List<HttpSession> sessions = (ArrayList<HttpSession>) request
+				.getServletContext().getAttribute("allUserSessions");
 		if (userPath.equalsIgnoreCase("/editImage")) {
 			if (request.getParameter("imageId") != null) {
 				int imageId = Integer.parseInt(request.getParameter("imageId"));
@@ -111,6 +119,7 @@ public class ImageController extends HttpServlet {
 			url = "/pages/private/imageDataDisplay.jsp?";
 		}
 		try {
+			updateSessions.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();

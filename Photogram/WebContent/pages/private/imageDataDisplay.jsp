@@ -7,14 +7,13 @@
 			<div class="row">
 				<img
 					src="${pageContext.request.contextPath}/displayImg?imageId=${image.imageId}"
-					class="img-thumbnail">
+					class="img-thumbnail full-image">
 			</div>
 			<div class="row">
 				<fieldset>
 					<legend>Description</legend>
 					<c:out value="${image.description}" />
 				</fieldset>
-				<%-- <c:set var="isOwner" value="${requestScope['owner']}"/> --%>
 				<c:if test="${requestScope['owner']}">
 					<div class="user-private-edit">
 						<fieldset>
