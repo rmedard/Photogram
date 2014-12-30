@@ -1,5 +1,7 @@
-header {
-	margin-bottom: 30px;
+#users-list>header {
+	margin-bottom: 10px;
+	text-align: center;
+	font-weight: bold;
 }
 
 html, body {
@@ -49,7 +51,7 @@ html, body {
 	list-style-type: none;
 }
 
-#allUsers>li>div>img {
+#allUsers>li>div>img, #followed-users>img {
 	width: 32px;
 	height: 32px;
 	overflow: hidden;
@@ -63,4 +65,8 @@ html, body {
 img.full-image {
 	max-width: 650px;
 	max-height: auto;
+}
+.user-profile{
+	border: 1px solid #ebebeb;
+	padding-bottom: 10px;
 }

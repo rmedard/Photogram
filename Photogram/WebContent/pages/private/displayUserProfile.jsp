@@ -35,9 +35,31 @@
 								</c:otherwise>
 							</c:choose>
 							<a href="<c:url value="/pages/public/editAddUser.jsp"/>"
-								class="btn btn-default">Modifier</a> <a
-								href="${pageContext.request.contextPath}/deleteUser?userId=${user.userId}"
-								class="btn btn-default">Supprimer</a>
+								class="btn btn-default">Modifier</a> <a href="#"
+								class="btn btn-default" data-toggle="modal"
+								data-target="#confirmDelete">Supprimer</a>
+							<div class="modal fade" id="confirmDelete" tabindex="-1"
+								role="dialog" aria-labelledby="confirmDelete" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">&times;</button>
+											<h4 class="modal-title" id="myModalLabel">Confirmez</h4>
+										</div>
+										<div class="modal-body">
+											<h3>Voulez-vous supprimer votre compte?</h3>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">Fermer</button>
+											<a
+												href="${pageContext.request.contextPath}/deleteUser?userId=${user.userId}"
+												class="btn btn-primary">Supprimer</a>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<jsp:include page="/pages/private/templates/mesphotos.jsp"

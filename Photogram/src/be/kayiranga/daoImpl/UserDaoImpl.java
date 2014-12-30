@@ -8,20 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
-import be.kayiranga.dao.FollowshipDao;
 import be.kayiranga.dao.UserDao;
 import be.kayiranga.model.Image;
 import be.kayiranga.model.User;
 
 public class UserDaoImpl implements UserDao {
 
-//	private FollowshipDao followshipDao;
-	
 	public UserDaoImpl() {
-//		followshipDao = new FollowshipDaoImpl();
 	}
 
 	@Override
@@ -164,15 +157,15 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> findUserByToken(String token) {
-		String query = "SELECT * FROM users WHERE username = ? OR name = ? OR postname = ?";
+		String query = "SELECT * FROM users WHERE username LIKE ? OR name LIKE ? OR postname LIKE ?";
 		List<User> users = new ArrayList<User>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try (Connection connection = ConnectionManager.getConnection()) {
 			ps = connection.prepareStatement(query);
-			ps.setString(1, token);
-			ps.setString(2, token);
-			ps.setString(3, token);
+			ps.setString(1, "%" + token + "%");
+			ps.setString(2, "%" + token + "%");
+			ps.setString(3, "%" + token + "%");
 			rs = ps.executeQuery();
 			users = parseUsers(rs);
 		} catch (SQLException e) {
@@ -302,7 +295,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return u;
 	}
-	
+
 	private List<User> parseUsers(ResultSet rs) {
 		List<User> users = new ArrayList<User>();
 		try {

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import be.kayiranga.dao.FollowshipDao;
@@ -54,7 +55,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
@@ -108,7 +109,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 		}
 		return followshipExists;
 	}
-	
+
 	@Override
 	public void sortFollowships(User user, HttpSession s) {
 		List<User> allUsers = userDao.findAllUsers();
@@ -117,8 +118,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 		List<Image> followeeImages = new ArrayList<Image>();
 		for (User u : allUsers) {
 			if (!user.equals(u)) {
-				if (checkFollowship(user.getUserId(),
-						u.getUserId())) {
+				if (checkFollowship(user.getUserId(), u.getUserId())) {
 					followees.add(u);
 					followeeImages.addAll(imageDao.getImagesByUser(u));
 				} else {
@@ -129,6 +129,26 @@ public class FollowshipDaoImpl implements FollowshipDao {
 		s.setAttribute("followees", followees);
 		s.setAttribute("nonfollowees", nonfollowees);
 		s.setAttribute("followeeImages", followeeImages);
+	}
+
+	@Override
+	public void sortFollowships(User user, HttpServletRequest req,
+			List<User> users) {
+		List<User> followees = new ArrayList<User>();
+		List<User> nonfollowees = new ArrayList<User>();
+		if (users != null && users.size() > 0) {
+			for (User u : users) {
+				if (!user.equals(u)) {
+					if (checkFollowship(user.getUserId(), u.getUserId())) {
+						followees.add(u);
+					} else {
+						nonfollowees.add(u);
+					}
+				}
+			}
+		}
+		req.setAttribute("followees", followees);
+		req.setAttribute("nonfollowees", nonfollowees);
 	}
 
 	private void close(ResultSet rs) {

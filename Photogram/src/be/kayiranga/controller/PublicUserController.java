@@ -210,6 +210,7 @@ public class PublicUserController extends HttpServlet {
 					userDir.mkdir();
 				}
 				session.setAttribute("user", newUser);
+				session.setAttribute("userId", newUser.getUserId());
 				sessions.add(session);
 				followshipDao.sortFollowships(newUser, session);
 			}

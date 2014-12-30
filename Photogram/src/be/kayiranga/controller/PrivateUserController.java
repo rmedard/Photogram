@@ -1,12 +1,16 @@
 package be.kayiranga.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.FileUtils;
 
 import be.kayiranga.dao.FollowshipDao;
 import be.kayiranga.dao.UserDao;
@@ -56,12 +60,22 @@ public class PrivateUserController extends HttpServlet {
 				User user = userDao.findUserById(Integer.parseInt(request
 						.getParameter("userId")));
 				if (user != null) {
-					//Delete files...
+					FileUtils.deleteDirectory(new File(user.getUserDir()));
 					userDao.deleteUser(user);
 					request.getServletContext().setAttribute("allUsers",
 							userDao.findAllUsers());
 					url = "/login?action=logout";
 				}
+			}
+		} else if (userPath.equals("/search")) {
+			HttpSession session = request.getSession(false);
+			if (session.getAttribute("user") != null) {
+				User user = userDao.findUserById(Integer.parseInt(session
+						.getAttribute("userId").toString()));
+				String searchToken = request.getParameter("searchTxt");
+				List<User> foundUsers = userDao.findUserByToken(searchToken);
+				request.setAttribute("requestSent", true);
+				followshipDao.sortFollowships(user, request, foundUsers);
 			}
 		}
 
