@@ -67,8 +67,8 @@ public class PublicUserController extends HttpServlet {
 			}
 			url = "/pages/public" + userPath + ".jsp";
 		} else if (userPath.equalsIgnoreCase("/imagedatadisplay")) {
+			Image img = null;
 			if (request.getParameter("imageId") != null) {
-				Image img = null;
 				if (!request.getParameter("imageId").equals("-1")) {
 					int imageId = Integer.parseInt(request
 							.getParameter("imageId"));
@@ -84,6 +84,8 @@ public class PublicUserController extends HttpServlet {
 						request.setAttribute("owner", false);
 					}
 				}
+			}
+			if (img != null) {
 				request.setAttribute("active-image", img);
 				url = "/pages/private/imageDataDisplay.jsp";
 			}

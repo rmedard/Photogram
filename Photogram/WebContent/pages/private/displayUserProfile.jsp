@@ -34,10 +34,13 @@
 									<c:set var="editOption" value="true" />
 								</c:otherwise>
 							</c:choose>
-							<a href="<c:url value="/pages/public/editAddUser.jsp"/>"
-								class="btn btn-default">Modifier</a> <a href="#"
-								class="btn btn-default" data-toggle="modal"
-								data-target="#confirmDelete">Supprimer</a>
+							<div class="btn-group">
+								<a href="<c:url value="/pages/public/editAddUser.jsp"/>"
+									class="btn btn-default">Modifier</a> <a href="#"
+									class="btn btn-default" data-toggle="modal"
+									data-target="#confirmDelete">Supprimer</a>
+
+							</div>
 							<div class="modal fade" id="confirmDelete" tabindex="-1"
 								role="dialog" aria-labelledby="confirmDelete" aria-hidden="true">
 								<div class="modal-dialog">

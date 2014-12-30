@@ -19,6 +19,7 @@ import be.kayiranga.dao.UserDao;
 import be.kayiranga.daoImpl.ImageDaoImpl;
 import be.kayiranga.daoImpl.UserDaoImpl;
 import be.kayiranga.model.Image;
+import be.kayiranga.model.User;
 
 public class ImageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -58,6 +59,9 @@ public class ImageController extends HttpServlet {
 			out.close();
 		} else {
 			String url = "";
+			@SuppressWarnings("unchecked")
+			List<HttpSession> sessions = (ArrayList<HttpSession>) request
+					.getServletContext().getAttribute("allUserSessions");
 			if (userPath.equalsIgnoreCase("/displayProfilePic")) {
 				String userId = request.getParameter("userId");
 				if (userId == null || userId.equals("")) {
@@ -74,14 +78,31 @@ public class ImageController extends HttpServlet {
 				}
 			} else if (userPath.equals("/displayFriendImage")) {
 				String imageId = request.getParameter("imageId");
-				if ( imageId != null && !imageId.equals("")) {
+				if (imageId != null && !imageId.equals("")) {
 					int imgId = Integer.parseInt(imageId);
-					if(imageDao.getImageById(imgId).isPublicPic()){
+					if (imageDao.getImageById(imgId).isPublicPic()) {
 						url = "/displayImg?imageId" + imgId;
+					}
+				}
+			} else if (userPath.equals("/delete-image")) {
+				String imageId = request.getParameter("imageId");
+				if (imageId != null && !imageId.equals("")) {
+					Image img = imageDao
+							.getImageById(Integer.parseInt(imageId));
+					HttpSession session = request.getSession(false);
+					User owner = userDao.findUserById(img.getOwnerId());
+					User loggedIn = userDao
+							.findUserById(Integer.parseInt(session
+									.getAttribute("userId").toString()));
+					if (owner.equals(loggedIn)) {
+						imageDao.deleteImage(img);
+						session.setAttribute("images", imageDao.getImagesByUser(owner));
+						url = "/pages/private/displayUserProfile.jsp";
 					}
 				}
 			}
 			try {
+				updateSessions.update(sessions);
 				request.getRequestDispatcher(url).forward(request, response);
 			} catch (Exception ex) {
 				ex.printStackTrace();

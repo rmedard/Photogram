@@ -102,4 +102,8 @@
 		<servlet-name>imageController</servlet-name>
 		<url-pattern>/displayFriendImage</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>imageController</servlet-name>
+		<url-pattern>/delete-image</url-pattern>
+	</servlet-mapping>
 </web-app>

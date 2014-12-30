@@ -45,11 +45,34 @@
 							<div class="control-group">
 								<button class="btn btn-default" data-toggle="modal"
 									data-target="#image-data-edit">Modifier</button>
+								<button class="btn btn-default" data-toggle="modal"
+									data-target="#image-delete">Supprimer</button>
 							</div>
 						</fieldset>
 					</div>
 				</c:if>
 
+			</div>
+		</div>
+		<div class="modal fade" id="image-delete" tabindex="-1" role="dialog"
+			aria-labelledby="confirmDelete" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">Confirmez</h4>
+					</div>
+					<div class="modal-body">
+						<h3>Voulez-vous supprimer cette image?</h3>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+						<a
+							href="${pageContext.request.contextPath}/delete-image?imageId=${image.imageId}"
+							class="btn btn-primary">Supprimer</a>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="modal fade" id="image-data-edit" tabindex="-1"
