@@ -22,10 +22,14 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
-							<h3>Nom: ${user.name}</h3>
-							<h3>Prénom: ${user.postname}</h3>
-							<h3>Emai: ${user.email}</h3>
+						<div class="col-md-6 user-details">
+							<label>Nom:</label>
+							<c:out value="${user.name}" />
+							<br> <label>Prénom:</label>
+							<c:out value="${user.postname}" />
+							<br> <label>Email:</label>
+							<c:out value="${user.email}" />
+							<br>
 							<c:choose>
 								<c:when test="${user.name eq null}">
 									<c:set var="editOption" value="false" />
@@ -39,7 +43,6 @@
 									class="btn btn-default">Modifier</a> <a href="#"
 									class="btn btn-default" data-toggle="modal"
 									data-target="#confirmDelete">Supprimer</a>
-
 							</div>
 							<div class="modal fade" id="confirmDelete" tabindex="-1"
 								role="dialog" aria-labelledby="confirmDelete" aria-hidden="true">

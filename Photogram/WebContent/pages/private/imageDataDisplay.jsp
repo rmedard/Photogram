@@ -51,7 +51,6 @@
 						</fieldset>
 					</div>
 				</c:if>
-
 			</div>
 		</div>
 		<div class="modal fade" id="image-delete" tabindex="-1" role="dialog"

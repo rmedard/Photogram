@@ -32,14 +32,14 @@ public class PublicUserController extends HttpServlet {
 	private UserDao userDao;
 	private ImageDao imageDao;
 	private FollowshipDao followshipDao;
-	private UpdateSessions updateSessions;
+	private SessionTools sessionTools;
 
 	public PublicUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		imageDao = new ImageDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
-		updateSessions = new UpdateSessions();
+		sessionTools = new SessionTools();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -89,9 +89,17 @@ public class PublicUserController extends HttpServlet {
 				request.setAttribute("active-image", img);
 				url = "/pages/private/imageDataDisplay.jsp";
 			}
+		}else if(userPath.equalsIgnoreCase("/userDetails")){
+			User user = userDao.findUserById(Integer.parseInt(request.getParameter("selectedUserId")));
+			request.setAttribute("owner", user);
+			request.setAttribute("ownerId", user.getUserId());
+			request.setAttribute("username", user.getUsername());
+			request.setAttribute("images", imageDao.getImagesByUser(user));
+			request.setAttribute("isFollowed", request.getParameter("isFollowed"));
+			url = "/pages/public/userDetails.jsp";
 		}
 		try {
-			updateSessions.update(sessions);
+			sessionTools.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -264,7 +272,7 @@ public class PublicUserController extends HttpServlet {
 			}
 		}
 		try {
-			updateSessions.update(sessions);
+			sessionTools.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();

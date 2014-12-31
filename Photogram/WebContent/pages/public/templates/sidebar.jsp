@@ -6,7 +6,8 @@
 	<div class="well" id="users-list">
 		<header>Les utilisateurs</header>
 		<div class="row">
-			<form action="${pageContext.request.contextPath}/search" role="form" method="get">
+			<form action="${pageContext.request.contextPath}/search" role="form"
+				method="get">
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="Recherche"
 						name="searchTxt"> <span class="input-group-btn">
@@ -33,11 +34,13 @@
 						<c:forEach items="${followees}" var="followee">
 							<li>
 								<div class="">
-									<img
+									<a
+										href="${pageContext.request.contextPath}/userDetails?selectedUserId=${followee.userId}&isFollowed=${1}"
+										class="btn"> <img
 										src="${pageContext.request.contextPath}/displayProfilePic?userId=${followee.userId}"
-										class="img-thumbnail img-circle" />
-									<c:out value="${followee.username}" />
-
+										class="img-thumbnail img-circle" /> <c:out
+											value="${followee.username}" />
+									</a>
 									<c:url value="/unfollow" var="unfollowURL">
 										<c:param name="ferid" value="${sessionScope.userId}" />
 										<c:param name="fedid" value="${followee.userId}" />
@@ -48,12 +51,16 @@
 							</li>
 						</c:forEach>
 						<c:forEach items="${nonfollowees}" var="nonfollowee">
+
 							<li>
 								<div class="">
-									<img
+									<a
+										href="${pageContext.request.contextPath}/userDetails?selectedUserId=${nonfollowee.userId}&isFollowed=${0}"
+										class="btn"> <img
 										src="${pageContext.request.contextPath}/displayProfilePic?userId=${nonfollowee.userId}"
-										class="img-thumbnail img-circle" />
-									<c:out value="${nonfollowee.username}" />
+										class="img-thumbnail img-circle" /> <c:out
+											value="${nonfollowee.username}" />
+									</a>
 
 									<c:url value="/follow" var="followURL">
 										<c:param name="ferid" value="${sessionScope.userId}" />
@@ -70,10 +77,13 @@
 						<c:forEach var="user" items="${applicationScope.allUsers}">
 							<li>
 								<div class="">
-									<img
+									<a
+										href="${pageContext.request.contextPath}/userDetails?selectedUserId=${user.userId}&isFollowed=${-1}"
+										class="btn"> <img
 										src="${pageContext.request.contextPath}/displayProfilePic?userId=${user.userId}"
-										class="img-thumbnail img-circle" />
-									<c:out value="${user.username}" />
+										class="img-thumbnail img-circle" /> <c:out
+											value="${user.username}" />
+									</a>
 								</div>
 							</li>
 						</c:forEach>

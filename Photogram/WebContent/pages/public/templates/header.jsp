@@ -10,11 +10,13 @@
 <meta name="generator" content="Bootply" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link href="/Photogram/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/Photogram/resources/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css">
 <!--[if lt IE 9]>
 		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-<link href="/Photogram/resources/css/styles.css" rel="stylesheet" type="text/css">
+<link href="/Photogram/resources/css/styles.css" rel="stylesheet"
+	type="text/css">
 </head>
 <body>
 	<header class="navbar navbar-default navbar-static-top"
@@ -31,11 +33,18 @@
 			</div>
 			<nav class="collapse navbar-collapse" role="navigation">
 				<ul class="nav navbar-nav">
-					<li><a href="/Photogram/pages/private/displayUserProfile.jsp">Mon
+					<li><a
+						href="${pageContext.request.contextPath}/pages/private/displayUserProfile.jsp">Mon
 							profil</a></li>
-					<li><a href="/Photogram/pages/private/friends.jsp">Mes amis</a></li>
-					<li><a href="/Photogram/pages/private/photos.jsp">Mes photos</a></li>
-					<li><a href="/Photogram/pages/public/apropos.jsp">A propos</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/pages/private/friends.jsp">Mes
+							amis</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/pages/private/photos.jsp">Mes
+							photos</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/pages/public/apropos.jsp">A
+							propos</a></li>
 				</ul>
 				<c:choose>
 					<c:when test="${user.username eq null}">

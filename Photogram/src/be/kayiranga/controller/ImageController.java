@@ -1,5 +1,6 @@
 package be.kayiranga.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
+
 import be.kayiranga.dao.ImageDao;
 import be.kayiranga.dao.UserDao;
 import be.kayiranga.daoImpl.ImageDaoImpl;
@@ -26,13 +29,13 @@ public class ImageController extends HttpServlet {
 
 	private ImageDao imageDao;
 	private UserDao userDao;
-	private UpdateSessions updateSessions;
+	private SessionTools sessionTools;
 
 	public ImageController() {
 		super();
 		imageDao = new ImageDaoImpl();
 		userDao = new UserDaoImpl();
-		updateSessions = new UpdateSessions();
+		sessionTools = new SessionTools();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -91,18 +94,18 @@ public class ImageController extends HttpServlet {
 							.getImageById(Integer.parseInt(imageId));
 					HttpSession session = request.getSession(false);
 					User owner = userDao.findUserById(img.getOwnerId());
-					User loggedIn = userDao
-							.findUserById(Integer.parseInt(session
-									.getAttribute("userId").toString()));
+					User loggedIn = sessionTools.getLoggedInUser(request);
 					if (owner.equals(loggedIn)) {
+						FileUtils.deleteQuietly(new File(img.getImagePath()));
 						imageDao.deleteImage(img);
-						session.setAttribute("images", imageDao.getImagesByUser(owner));
+						session.setAttribute("images",
+								imageDao.getImagesByUser(owner));
 						url = "/pages/private/displayUserProfile.jsp";
 					}
 				}
 			}
 			try {
-				updateSessions.update(sessions);
+				sessionTools.update(sessions);
 				request.getRequestDispatcher(url).forward(request, response);
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -121,26 +124,29 @@ public class ImageController extends HttpServlet {
 			if (request.getParameter("imageId") != null) {
 				int imageId = Integer.parseInt(request.getParameter("imageId"));
 				Image updatedImage = imageDao.getImageById(imageId);
-				Image image = new Image();
-				image.setImageId(imageId);
-				image.setImagePath(updatedImage.getImagePath());
-				image.setDescription(request.getParameter("descriptionTxt"));
-				image.setOwnerId(userDao
-						.findUserById(updatedImage.getOwnerId()).getUserId());
-				image.setPublicPic(booleanParser(request
-						.getParameter("publicRd")));
-				image.setProfilePic(booleanParser(request
-						.getParameter("profileRd")));
-				if (!image.equals(updatedImage)) {
-					imageDao.updateImage(image);
-					request.setAttribute("active-image",
-							imageDao.getImageById(image.getImageId()));
+				if (sessionTools.getLoggedInUser(request).equals(
+						userDao.findUserById(updatedImage.getOwnerId()))) {
+					Image image = new Image();
+					image.setImageId(imageId);
+					image.setImagePath(updatedImage.getImagePath());
+					image.setDescription(request.getParameter("descriptionTxt"));
+					image.setOwnerId(userDao.findUserById(
+							updatedImage.getOwnerId()).getUserId());
+					image.setPublicPic(booleanParser(request
+							.getParameter("publicRd")));
+					image.setProfilePic(booleanParser(request
+							.getParameter("profileRd")));
+					if (!image.equals(updatedImage)) {
+						imageDao.updateImage(image);
+						request.setAttribute("active-image",
+								imageDao.getImageById(image.getImageId()));
+					}
 				}
 			}
 			url = "/pages/private/imageDataDisplay.jsp?";
 		}
 		try {
-			updateSessions.update(sessions);
+			sessionTools.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -157,5 +163,4 @@ public class ImageController extends HttpServlet {
 		}
 		return bool;
 	}
-
 }

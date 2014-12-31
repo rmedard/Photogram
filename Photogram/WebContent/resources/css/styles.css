@@ -51,7 +51,7 @@ html, body {
 	list-style-type: none;
 }
 
-#allUsers>li>div>img, #followed-users>img {
+#allUsers>li>div>a>img, #followed-users>img {
 	width: 32px;
 	height: 32px;
 	overflow: hidden;
@@ -69,4 +69,7 @@ img.full-image {
 .user-profile{
 	border: 1px solid #ebebeb;
 	padding-bottom: 10px;
+}
+.user-details{
+	font-size: 20px;
 }

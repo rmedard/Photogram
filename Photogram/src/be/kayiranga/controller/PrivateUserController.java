@@ -2,6 +2,7 @@ package be.kayiranga.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -23,17 +24,22 @@ public class PrivateUserController extends HttpServlet {
 
 	private UserDao userDao;
 	private FollowshipDao followshipDao;
+	private SessionTools sessionTools;
 
 	public PrivateUserController() {
 		super();
 		userDao = new UserDaoImpl();
 		followshipDao = new FollowshipDaoImpl();
+		sessionTools = new SessionTools();
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String userPath = request.getServletPath();
 		String url = "";
+		@SuppressWarnings("unchecked")
+		List<HttpSession> sessions = (ArrayList<HttpSession>) request
+				.getServletContext().getAttribute("allUserSessions");
 		if (userPath.equals("/follow")) {
 			HttpSession session = request.getSession(false);
 			if (session.getAttribute("user") != null) {
@@ -70,16 +76,15 @@ public class PrivateUserController extends HttpServlet {
 		} else if (userPath.equals("/search")) {
 			HttpSession session = request.getSession(false);
 			if (session.getAttribute("user") != null) {
-				User user = userDao.findUserById(Integer.parseInt(session
-						.getAttribute("userId").toString()));
+				User user = sessionTools.getLoggedInUser(request);
 				String searchToken = request.getParameter("searchTxt");
 				List<User> foundUsers = userDao.findUserByToken(searchToken);
 				request.setAttribute("requestSent", true);
 				followshipDao.sortFollowships(user, request, foundUsers);
 			}
 		}
-
 		try {
+			sessionTools.update(sessions);
 			request.getRequestDispatcher(url).forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();

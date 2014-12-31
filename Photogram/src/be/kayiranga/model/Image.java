@@ -20,13 +20,13 @@ public class Image implements Serializable {
 	}
 
 	public Image(String imagePath, String imageType, int ownerId, boolean isProfilePic,
-			boolean isPublic) {
+			boolean isPublicPic) {
 		super();
 		this.imagePath = imagePath;
 		this.imageType = imageType;
 		this.ownerId = ownerId;
 		this.profilePic = isProfilePic;
-		this.publicPic = isPublic;
+		this.publicPic = isPublicPic;
 	}
 
 	public Image(int imageId, String imageFile, String imageType, int ownerId,
