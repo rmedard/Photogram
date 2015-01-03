@@ -14,8 +14,6 @@ import be.kayiranga.model.User;
 
 public class ImageDaoImpl implements ImageDao {
 
-	// private Connection connection = null;
-
 	@Override
 	public void createImage(Image image) {
 		try (Connection connection = ConnectionManager.getConnection()) {
