@@ -256,7 +256,7 @@ public class PublicUserController extends HttpServlet {
 									session.setAttribute("images", imageDao
 											.getImagesByUser(loggedInUser));
 									request.setAttribute("info_message",
-											"Photo téléchargée avec succès!");
+											"Photo tÃ©lÃ©chargÃ©e avec succÃ¨s!");
 									url = "/pages/private/displayUserProfile.jsp";
 								} else {
 
@@ -266,7 +266,7 @@ public class PublicUserController extends HttpServlet {
 					}
 				} catch (Exception e) {
 					request.setAttribute("err_message",
-							"Echèc de téléchargement...");
+							"EchÃ©c de tÃ©lÃ©chargement...");
 					e.printStackTrace();
 				}
 			}

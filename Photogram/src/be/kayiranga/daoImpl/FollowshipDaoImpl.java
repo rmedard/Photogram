@@ -110,6 +110,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 		return followshipExists;
 	}
 
+	//Overall followships sorting
 	@Override
 	public void sortFollowships(User user, HttpSession s) {
 		List<User> allUsers = userDao.findAllUsers();
@@ -131,6 +132,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 		s.setAttribute("followeeImages", followeeImages);
 	}
 
+	//Followship sorting for searchs
 	@Override
 	public void sortFollowships(User user, HttpServletRequest req,
 			List<User> users) {
