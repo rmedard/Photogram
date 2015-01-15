@@ -132,7 +132,7 @@ public class FollowshipDaoImpl implements FollowshipDao {
 		s.setAttribute("followeeImages", followeeImages);
 	}
 
-	//Followship sorting for searchs
+	//Followship sorting for search
 	@Override
 	public void sortFollowships(User user, HttpServletRequest req,
 			List<User> users) {
