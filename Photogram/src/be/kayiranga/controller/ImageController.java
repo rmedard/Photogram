@@ -53,7 +53,7 @@ public class ImageController extends HttpServlet {
 				image.setImageType("png");
 				image.setImagePath(getServletContext().getInitParameter(
 						"resources")
-						+ "\\images\\anonymous.png");
+						+ "/images/anonymous.png");
 			}
 			response.setContentType("image/" + image.getImageType());
 			Path path = Paths.get(image.getImagePath());

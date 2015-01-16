@@ -15,12 +15,12 @@
 	<context-param>
 		<description>Location to store users files</description>
 		<param-name>image-upload</param-name>
-		<param-value>C:\apache-tomcat-8.0.15\webapps\userdirs</param-value>
+		<param-value>/Applications/apache-tomcat-8.0.15/webapps/userdirs</param-value>
 	</context-param>
 	<context-param>
 		<description>Location to store common resources</description>
 		<param-name>resources</param-name>
-		<param-value>C:\apache-tomcat-8.0.15\webapps\resources</param-value>
+		<param-value>/Applications/apache-tomcat-8.0.15/webapps/resources</param-value>
 	</context-param>
 	<servlet>
 		<servlet-name>privateUC</servlet-name>

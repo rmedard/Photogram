@@ -159,7 +159,7 @@ public class PublicUserController extends HttpServlet {
 				if (updatedUser.getUserDir() == null) {
 					updatedUser.setUserDir(getServletContext()
 							.getInitParameter("image-upload")
-							+ "\\"
+							+ "/"
 							+ user.getUsername()
 							+ "_"
 							+ RandomStringUtils.randomAlphanumeric(6));
@@ -174,7 +174,7 @@ public class PublicUserController extends HttpServlet {
 						// Rename the user directory name
 						user.setUserDir(getServletContext().getInitParameter(
 								"image-upload")
-								+ "\\"
+								+ "/"
 								+ user.getUsername()
 								+ updatedUser.getUserDir().substring(
 										updatedUser.getUserDir().length() - 7));
@@ -186,10 +186,10 @@ public class PublicUserController extends HttpServlet {
 						// Rename user images pathnames
 						for (Image image : imageDao.getImagesByUser(user)) {
 							image.setImagePath(user.getUserDir()
-									+ "\\"
+									+ "/"
 									+ image.getImagePath().substring(
 											image.getImagePath().lastIndexOf(
-													"\\")));
+													"/")));
 							imageDao.updateImage(image);
 						}
 					}
@@ -205,7 +205,7 @@ public class PublicUserController extends HttpServlet {
 				user.setPassword(request.getParameter("passwordTxt"));
 				user.setUserDir(getServletContext().getInitParameter(
 						"image-upload")
-						+ "\\"
+						+ "/"
 						+ user.getUsername()
 						+ "_"
 						+ RandomStringUtils.randomAlphanumeric(6));
@@ -245,7 +245,7 @@ public class PublicUserController extends HttpServlet {
 											|| (f.exists() && !f.isDirectory())) {
 										f.mkdirs();
 									}
-									File file = new File(f + "\\" + fileName);
+									File file = new File(f + "/" + fileName);
 									fileItem.write(file);
 									Image image = new Image(file.getPath(),
 											FilenameUtils
